@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
         jDown = Input.GetButtonDown("Jump");
     }
 
+   
     void Move()
     {
         moveVec = new Vector3(haxis, 0, vaxis).normalized;
@@ -63,9 +64,11 @@ public class Player : MonoBehaviour
         transform.position += moveVec * moveSpeed * Time.deltaTime;
         anim.SetBool("isRun", moveVec != Vector3.zero);
     }
-    void Turn()
+    void Turn() 
     {
         transform.LookAt(transform.position + moveVec);
+
+
     }
     void Dodge()
     {
