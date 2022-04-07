@@ -8,10 +8,12 @@ public class Player : MonoBehaviour
     public float moveSpeed;
     bool canAttack = true;
 
-
+    bool isJump;
     bool fDown;
     bool jDown;
     bool isDodge;
+    bool DodgeDown;
+
 
 
     float vaxis;
@@ -41,6 +43,7 @@ public class Player : MonoBehaviour
         Attack();
         Turn();
         Dodge();
+        Jump();
     }
 
     void Getinput()
@@ -49,6 +52,8 @@ public class Player : MonoBehaviour
         vaxis = Input.GetAxisRaw("Vertical");
         fDown = Input.GetButtonDown("Fire1");
         jDown = Input.GetButtonDown("Jump");
+        DodgeDown = Input.GetButtonDown("Dodge");
+
     }
 
    
@@ -64,22 +69,31 @@ public class Player : MonoBehaviour
         transform.position += moveVec * moveSpeed * Time.deltaTime;
         anim.SetBool("isRun", moveVec != Vector3.zero);
     }
+
+    void Jump()
+    {
+        if (jDown && !isJump && !isDodge)
+        {
+            rigid.AddForce(Vector3.up * 10,ForceMode.Impulse);
+            isJump = true;
+            anim.SetBool("isJump", true);
+            anim.SetTrigger("doJump");
+        }
+    }
     void Turn() 
     {
         transform.LookAt(transform.position + moveVec);
 
-
     }
     void Dodge()
     {
-        if (jDown && canAttack)
+        if (DodgeDown && !isJump)
         {
 
             DodgeVec = moveVec;
             moveSpeed *= 2;
             isDodge = true;
             anim.SetTrigger("doDodge");
-
            Invoke("Dodgeout", 0.2f);
         }
     }
@@ -93,11 +107,21 @@ public class Player : MonoBehaviour
     {
         firedelay += Time.deltaTime;
         canAttack = 1.5 < firedelay;
-        if (fDown && canAttack)
+        if (fDown && canAttack && !isJump ) 
         {
             weapon.Use();
             anim.SetTrigger("doAttack1");
             firedelay = 0;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Floor")
+        {
+            anim.SetBool("isJump", false);
+            isJump = false;
+
         }
     }
 
