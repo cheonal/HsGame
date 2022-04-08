@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
     {
         if (jDown && !isJump && !isDodge)
         {
-            rigid.AddForce(Vector3.up * 10,ForceMode.Impulse);
+            rigid.AddForce(Vector3.up * 8,ForceMode.Impulse);
             isJump = true;
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
     void Attack()
     {
         firedelay += Time.deltaTime;
-        canAttack = 1.5 < firedelay;
+        canAttack = 1 < firedelay;
         if (fDown && canAttack && !isJump ) 
         {
             weapon.Use();

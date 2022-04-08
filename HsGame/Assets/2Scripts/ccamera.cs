@@ -9,7 +9,7 @@ public class ccamera : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(player.transform.position.x, 4f, player.transform.position.z);
+        transform.position = new Vector3(player.transform.position.x, 4.5f, player.transform.position.z);
 
     }
 }
