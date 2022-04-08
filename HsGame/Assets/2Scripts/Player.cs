@@ -6,13 +6,17 @@ public class Player : MonoBehaviour
 {
 
     public float moveSpeed;
+    public int maxhealth;
+    public int health;
     bool canAttack = true;
+    public Camera followCamera;
 
     bool isJump;
     bool fDown;
     bool jDown;
     bool isDodge;
     bool DodgeDown;
+    bool isDamage;
 
 
 
@@ -24,6 +28,8 @@ public class Player : MonoBehaviour
 
     Rigidbody rigid;
     Animator anim;
+    MeshRenderer[] meshs;
+
     Vector3 moveVec;
     Vector3 DodgeVec;
 
@@ -31,6 +37,7 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
+        meshs = GetComponentsInChildren<MeshRenderer>();
     }
 
 
@@ -84,6 +91,21 @@ public class Player : MonoBehaviour
     {
         transform.LookAt(transform.position + moveVec);
 
+        if (fDown)
+        {
+            moveVec = Vector3.zero;
+            Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayhit;
+            if (Physics.Raycast(ray, out rayhit, 100))
+            {
+                Vector3 nextVect = rayhit.point - transform.position;
+                nextVect.y = 0;
+                transform.LookAt(transform.position + nextVect);
+            }
+
+
+        }
+
     }
     void Dodge()
     {
@@ -113,6 +135,37 @@ public class Player : MonoBehaviour
             anim.SetTrigger("doAttack1");
             firedelay = 0;
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy Bullet")
+        {
+            if (!isDamage)
+            {
+                Bullet enemyBullet = other.GetComponent<Bullet>();
+                health -= enemyBullet.damage;
+                StartCoroutine(OnDamage());
+            }
+
+        }
+    }
+
+    IEnumerator OnDamage()
+    {
+        isDamage = true;
+        foreach(MeshRenderer mesh in meshs)
+        {
+            mesh.material.color = Color.gray;
+        }
+        yield return new WaitForSeconds(1f);
+
+        isDamage = false;
+        foreach (MeshRenderer mesh in meshs)
+        {
+            mesh.material.color = Color.white;
+        }
+
     }
 
     void OnCollisionEnter(Collision collision)

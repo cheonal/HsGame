@@ -7,10 +7,12 @@ public class Enemy : MonoBehaviour
     public int maxHealth;
     public int curHealth;
     public Transform Target;
+    public BoxCollider meleeArea;
     public bool isChase;
+    public bool isAttack;
+    public bool isDead;
 
     MeshRenderer [] meshs;
-    BoxCollider BoxCollider;
     NavMeshAgent nav;
     Rigidbody rigid;
     Animator anim;
@@ -18,23 +20,29 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         meshs = GetComponentsInChildren<MeshRenderer>();
-        BoxCollider = GetComponent<BoxCollider>();
-        Weapon weapon = GetComponent<Weapon>();
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
+        rigid = GetComponent<Rigidbody>();
 
         Invoke("ChaseStart", 2);
     }
 
     void ChaseStart()
     {
-        isChase = true;
-        anim.SetBool("isWalk", true);
+            RaycastHit[] rayfindHits =
+             Physics.SphereCastAll(transform.position, 15,
+                                  Vector3.up, 0,
+                                   LayerMask.GetMask("Player"));
+        if(rayfindHits.Length > 0)
+        {
+            isChase = true;
+            anim.SetBool("isWalk", true);
+        }
     }
 
     void Update()
     {
-        if (isChase)
+        if (nav.enabled)
         {
             nav.SetDestination(Target.position);
             nav.isStopped = !isChase;
@@ -56,7 +64,69 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+        Finding();
+        Targeting();
         FrezzeVelocity();
+    }
+
+    void Finding()
+    {
+
+            RaycastHit[] rayfindHits =
+             Physics.SphereCastAll(transform.position, 15,
+                                  Vector3.up, 0,
+                                   LayerMask.GetMask("Player"));
+        if(rayfindHits.Length > 0)
+        {
+            isChase = true;
+            anim.SetBool("isWalk", true);
+        }
+
+
+
+
+    }
+    void Targeting()
+    {
+
+        if (!isDead)
+        {
+            float targetRadius = 1.5f;
+            float targetRange = 3f;
+
+            RaycastHit[] rayHits =
+                      Physics.SphereCastAll(transform.position, targetRadius,
+                                            transform.forward, targetRange,
+                                            LayerMask.GetMask("Player"));
+
+            if (rayHits.Length > 0 && !isAttack)
+            {
+                StartCoroutine(Attack());
+            }
+        }
+
+    }
+
+    IEnumerator Attack()
+    {
+        isChase = false;
+        isAttack = true;
+        anim.SetBool("isAttack", true);
+
+
+        yield return new WaitForSeconds(0.2f);
+        meleeArea.enabled = true;
+
+        yield return new WaitForSeconds(1f);
+        meleeArea.enabled = false;
+
+        yield return new WaitForSeconds(1f);
+
+        isChase = true;
+        isAttack = false;
+        anim.SetBool("isAttack", false);
+
+
     }
     void OnTriggerEnter(Collider other)
     {
@@ -64,14 +134,15 @@ public class Enemy : MonoBehaviour
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.Damage;
+            Vector3 reactVec = transform.position - other.transform.position;
 
-            StartCoroutine("OnDamage");
+            StartCoroutine(OnDamage(reactVec));
 
             
         }
     }
 
-    IEnumerator OnDamage()
+    IEnumerator OnDamage(Vector3 reactVec)
     {
         foreach (MeshRenderer mesh in meshs)
         {
@@ -93,10 +164,15 @@ public class Enemy : MonoBehaviour
             {
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
+                isDead = true;
                 isChase = false;
                 nav.enabled = false;
                 anim.SetTrigger("doDie");
-                rigid.AddForce(Vector3.up * 3, ForceMode.Impulse);
+
+                reactVec = reactVec.normalized;
+                reactVec += Vector3.up;
+                rigid.AddForce(reactVec, ForceMode.Impulse);
+
             }
 
             Destroy(gameObject, 4);
