@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public BoxCollider meleeArea;
     public bool isChase;
     public bool isAttack;
+    public bool isSearch;
     public bool isDead;
 
     MeshRenderer [] meshs;
@@ -23,29 +24,44 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
-
-        Invoke("ChaseStart", 2);
     }
 
     void ChaseStart()
     {
             RaycastHit[] rayfindHits =
-             Physics.SphereCastAll(transform.position, 15,
+             Physics.SphereCastAll(transform.position, 25,
                                   Vector3.up, 0,
                                    LayerMask.GetMask("Player"));
         if(rayfindHits.Length > 0)
         {
+            isSearch = true;
+        }
+        else
+        {
+            isSearch = false;
+        }
+
+        if(isSearch == true)
+        {
             isChase = true;
             anim.SetBool("isWalk", true);
+        }
+        else
+        {
+            anim.SetBool("isWalk", false);
         }
     }
 
     void Update()
     {
-        if (nav.enabled)
+        if (nav.enabled && isSearch)
         {
             nav.SetDestination(Target.position);
-            nav.isStopped = !isChase;
+            nav.isStopped = !isSearch;
+        }
+        if (isAttack)
+        {
+            this.nav.velocity = Vector3.zero;
         }
 
     }
@@ -64,28 +80,11 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        Finding();
+        ChaseStart();
         Targeting();
         FrezzeVelocity();
     }
 
-    void Finding()
-    {
-
-            RaycastHit[] rayfindHits =
-             Physics.SphereCastAll(transform.position, 15,
-                                  Vector3.up, 0,
-                                   LayerMask.GetMask("Player"));
-        if(rayfindHits.Length > 0)
-        {
-            isChase = true;
-            anim.SetBool("isWalk", true);
-        }
-
-
-
-
-    }
     void Targeting()
     {
 
@@ -138,7 +137,7 @@ public class Enemy : MonoBehaviour
 
             StartCoroutine(OnDamage(reactVec));
 
-            
+                        
         }
     }
 
