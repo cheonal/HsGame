@@ -7,7 +7,7 @@ public class Chicken : MonoBehaviour
     public int maxHealth;
     public int curHealth;
     public bool isDead;
-    MeshRenderer[] meshs;
+    SkinnedMeshRenderer[] meshs;
     Rigidbody rigid;
     Animator anim;
     bool isWalk;
@@ -18,23 +18,30 @@ public class Chicken : MonoBehaviour
         anim = GetComponent<Animator>();
         StartCoroutine(Action());
         Invoke("Move", 2);
-        meshs = GetComponentsInChildren<MeshRenderer>();
+        meshs = GetComponentsInChildren<SkinnedMeshRenderer>();
         rigid = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
+
+
         if (isWalk)
         {
             this.transform.position += movevec * speed * Time.deltaTime;
+
         }
         transform.LookAt(transform.position + movevec);
+        if (isDead)
+        {
+            movevec = Vector3.zero;
+        }
     }
 
     void Move()
     {
-        speed = Random.Range(0, 5);
-        movevec = new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3)).normalized;
+        speed = Random.Range(1,3);
+        movevec = new Vector3(Random.Range(0, 3), 0, Random.Range(0, 3)).normalized;
         Invoke("Move", 2);
     }
 
@@ -54,7 +61,7 @@ public class Chicken : MonoBehaviour
                 StartCoroutine(TurnHead());
                 break;
             case 2:
-                StartCoroutine(Eat());
+                 StartCoroutine(Eat());
                 break;
         }
     }
@@ -107,7 +114,7 @@ public class Chicken : MonoBehaviour
 
     IEnumerator OnDamage(Vector3 reactVec)
     {
-        foreach (MeshRenderer mesh in meshs)
+        foreach (SkinnedMeshRenderer mesh in meshs)
         {
             mesh.material.color = Color.red;
         }
@@ -115,7 +122,7 @@ public class Chicken : MonoBehaviour
 
         if (curHealth > 0)
         {
-            foreach (MeshRenderer mesh in meshs)
+            foreach (SkinnedMeshRenderer mesh in meshs)
             {
                 mesh.material.color = Color.white;
             }
@@ -123,20 +130,17 @@ public class Chicken : MonoBehaviour
         }
         else
         {
-            foreach (MeshRenderer mesh in meshs)
+            foreach (SkinnedMeshRenderer mesh in meshs)
             {
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
                 isDead = true;
                 anim.SetTrigger("doDie");
-
-                reactVec = reactVec.normalized;
-                reactVec += Vector3.up;
-                rigid.AddForce(reactVec, ForceMode.Impulse);
-
             }
 
             Destroy(gameObject, 4);
         }
     }
+
+
 }
