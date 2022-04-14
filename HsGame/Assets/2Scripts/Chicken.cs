@@ -6,11 +6,15 @@ public class Chicken : MonoBehaviour
 {
     public int maxHealth;
     public int curHealth;
+    public enum Type {A,B};
+    public Type enumType;
     public bool isDead;
+    Transform trans;
     SkinnedMeshRenderer[] meshs;
     Rigidbody rigid;
     Animator anim;
     bool isWalk;
+    float DeadCount;
     public int speed;
     public Vector3 movevec;
     void Awake()
@@ -20,20 +24,31 @@ public class Chicken : MonoBehaviour
         Invoke("Move", 2);
         meshs = GetComponentsInChildren<SkinnedMeshRenderer>();
         rigid = GetComponent<Rigidbody>();
+        trans = GetComponent<Transform>();
     }
 
     void Update()
     {
 
-
-        if (isWalk)
+        if (isWalk && !isDead)
         {
             this.transform.position += movevec * speed * Time.deltaTime;
 
         }
-        transform.LookAt(transform.position + movevec);
+        if (!isDead)
+        {
+            transform.LookAt(transform.position + movevec);
+        }
         if (isDead)
         {
+            
+            DeadCount += Time.deltaTime;
+            anim.enabled = false;
+            if (DeadCount < 0.7)
+            {
+                trans.Rotate(new Vector3(0, 0, -0.5f));
+
+            }
             movevec = Vector3.zero;
         }
     }
@@ -50,20 +65,37 @@ public class Chicken : MonoBehaviour
     IEnumerator Action()
     {
         yield return new WaitForSeconds(0.1f);
-
-        int random = Random.Range(0, 3);
-        switch (random)
+        switch (enumType)
         {
-            case 0:
-                StartCoroutine(Walk());
+            case Type.A:
+                int random = Random.Range(0, 3);
+                switch (random)
+                {
+                    case 0:
+                        StartCoroutine(TurnHead());
+                        break;
+                    case 1:
+                        StartCoroutine(Eat());
+                        break;
+                    case 2:
+                        StartCoroutine(Walk());
+                        break;
+                }
                 break;
-            case 1:
-                StartCoroutine(TurnHead());
-                break;
-            case 2:
-                 StartCoroutine(Eat());
+            case Type.B:
+                int ran = Random.Range(0, 2);
+                switch (ran)
+                {
+                    case 0:
+                        StartCoroutine(Walk());
+                        break;
+                    case 1:
+                        StartCoroutine(Eat());
+                        break;
+                }
                 break;
         }
+        
     }
 
     IEnumerator Walk()
@@ -128,14 +160,13 @@ public class Chicken : MonoBehaviour
             }
 
         }
-        else
+        else if(curHealth <= 0)
         {
             foreach (SkinnedMeshRenderer mesh in meshs)
             {
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
                 isDead = true;
-                anim.SetTrigger("doDie");
             }
 
             Destroy(gameObject, 4);
