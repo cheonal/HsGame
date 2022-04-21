@@ -44,9 +44,9 @@ public class Chicken : MonoBehaviour
             
             DeadCount += Time.deltaTime;
             anim.enabled = false;
-            if (DeadCount < 0.7)
+            if (DeadCount < 1)
             {
-                trans.Rotate(new Vector3(0, 0, -0.5f));
+                trans.Rotate(new Vector3(0, 0, -1.5f));
 
             }
             movevec = Vector3.zero;
