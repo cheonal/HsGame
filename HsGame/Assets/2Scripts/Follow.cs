@@ -17,7 +17,7 @@ public class Follow : MonoBehaviour
             target.Rotate(new Vector3(0, 1, 0));
         }
     }
-    void LateUpdate()
+   /* void LateUpdate()
     {
         if (Input.anyKeyDown && Input.GetKey("q"))
         {
@@ -31,6 +31,6 @@ public class Follow : MonoBehaviour
         {
             target.rotation = Quaternion.Euler(0, 0, 0);
         }
-    }
+    }*/
 
 }

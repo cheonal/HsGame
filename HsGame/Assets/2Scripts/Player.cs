@@ -4,34 +4,32 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    public float moveSpeed;
     public int maxhealth;
     public int health;
+    public float rotateSensitivity;
+    public float moveSpeed;
     bool canAttack = true;
-    public Camera followCamera;
-
+    bool canDodge = true;
     bool isJump;
     bool fDown;
     bool jDown;
     bool isDodge;
     bool DodgeDown;
     bool isDamage;
-
-
-
-    float vaxis;
-    float haxis;
     float firedelay;
+    float dodgedelay;
     public Weapon weapon;
-
 
     Rigidbody rigid;
     Animator anim;
     MeshRenderer[] meshs;
+    Vector3 lookforward;
+    Vector3 lookright;
+    Vector3 movedir;
 
-    Vector3 moveVec;
-    Vector3 DodgeVec;
+    public Transform cameraArm;
+    public Transform characterBody;
+    public Camera followCamera;
 
     void Awake()
     {
@@ -40,103 +38,75 @@ public class Player : MonoBehaviour
         meshs = GetComponentsInChildren<MeshRenderer>();
     }
 
-
-
-
     void Update()
     {
         Move();
         Getinput();
         Attack();
-        Turn();
         Dodge();
-        Jump();
+        Camera();
     }
 
     void Getinput()
     {
-        haxis = Input.GetAxisRaw("Horizontal");
-        vaxis = Input.GetAxisRaw("Vertical");
         fDown = Input.GetButtonDown("Fire1");
         jDown = Input.GetButtonDown("Jump");
         DodgeDown = Input.GetButtonDown("Dodge");
 
     }
 
-   
+    void Camera()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngel = cameraArm.rotation.eulerAngles;
+        float x = camAngel.x - mouseDelta.y;
+
+        if (x < 180f)
+        {
+            x = Mathf.Clamp(x, -1f, 70f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 335f, 361f);
+        }
+        if (Input.GetKeyDown("q"))
+        {
+            rotateSensitivity -= 0.1f;
+        }
+        if (Input.GetKeyDown("e"))
+        {
+            rotateSensitivity += 0.1f;
+        }
+        cameraArm.rotation = Quaternion.Euler(x , camAngel.y + mouseDelta.x * rotateSensitivity, camAngel.z);
+    }
     void Move()
     {
-        moveVec = new Vector3(haxis, 0, vaxis).normalized;
+        Vector3 moveVec = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        bool isMove = moveVec.magnitude != 0;
+        anim.SetBool("isRun", isMove);
+        lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
+        lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+        movedir = lookforward * moveVec.y + lookright * moveVec.x;
 
-        if (isDodge)
+
+        if (isMove)
         {
-            moveVec = DodgeVec;
+            characterBody.forward = movedir;
+
         }
 
-        transform.position += moveVec * moveSpeed * Time.deltaTime;
-        anim.SetBool("isRun", moveVec != Vector3.zero);
-    }
-
-    void Jump()
-    {
-        if (jDown && !isJump && !isDodge)
+        if (!canAttack)
         {
-            rigid.AddForce(Vector3.up * 8,ForceMode.Impulse);
-            isJump = true;
+            movedir = Vector3.zero;
+        }
+        if (jDown && !isDodge)
+        {
+            rigid.AddForce(Vector3.up * 5, ForceMode.Impulse);
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
         }
+        transform.position += movedir * moveSpeed * Time.deltaTime;
     }
-    void Turn() 
-    {
-        transform.LookAt(transform.position + moveVec);
-
-        if (fDown)
-        {
-            moveVec = Vector3.zero;
-            Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayhit;
-            if (Physics.Raycast(ray, out rayhit, 100))
-            {
-                Vector3 nextVect = rayhit.point - transform.position;
-                nextVect.y = 0;
-                transform.LookAt(transform.position + nextVect);
-            }
-
-
-        }
-
-    }
-    void Dodge()
-    {
-        if (DodgeDown && !isJump)
-        {
-
-            DodgeVec = moveVec;
-            moveSpeed *= 2;
-            isDodge = true;
-            anim.SetTrigger("doDodge");
-           Invoke("Dodgeout", 0.2f);
-        }
-    }
-    void Dodgeout()
-    {
-        moveSpeed *= 0.5f;
-        isDodge = false;
-    }
-    
-    void Attack()
-    {
-        firedelay += Time.deltaTime;
-        canAttack = 1 < firedelay;
-        if (fDown && canAttack && !isJump ) 
-        {
-            weapon.Use();
-            anim.SetTrigger("doAttack1");
-            firedelay = 0;
-        }
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Enemy Bullet")
@@ -150,11 +120,37 @@ public class Player : MonoBehaviour
 
         }
     }
+    void Attack()
+    {
+        firedelay += Time.deltaTime;
+        canAttack = 0.6 < firedelay;
+        if (fDown && canAttack && !isJump)
+        {
+            weapon.Use();
+            anim.SetTrigger("doAttack1");
+            firedelay = 0;
+        }
+    }
+
+    void Dodge()
+    {
+        dodgedelay += Time.deltaTime;
+        canDodge = 5 < dodgedelay;
+        if (DodgeDown && !isJump && canDodge)
+        {
+            moveSpeed *= 2;
+            isDodge = true;
+            anim.SetTrigger("doDodge");
+            dodgedelay = 0;
+            Invoke("Dodgeout", 0.5f);
+
+        }
+    }
 
     IEnumerator OnDamage()
     {
         isDamage = true;
-        foreach(MeshRenderer mesh in meshs)
+        foreach (MeshRenderer mesh in meshs)
         {
             mesh.material.color = Color.gray;
         }
@@ -167,17 +163,20 @@ public class Player : MonoBehaviour
         }
 
     }
-
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag == "Floor")
         {
             anim.SetBool("isJump", false);
             isJump = false;
 
         }
     }
-
+    void Dodgeout()
+    {
+        moveSpeed *= 0.5f;
+        isDodge = false;
+    }
     void FrezzeRotaiton()
     {
         rigid.angularVelocity = Vector3.zero;
