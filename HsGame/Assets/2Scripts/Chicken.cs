@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Chicken : MonoBehaviour
 {
     public int maxHealth;
     public int curHealth;
+    public Image hpbar;
     public enum Type {A,B};
     public Type enumType;
     public bool isDead;
@@ -29,6 +30,7 @@ public class Chicken : MonoBehaviour
 
     void Update()
     {
+        HpBar();
 
         if (isWalk && !isDead)
         {
@@ -44,15 +46,18 @@ public class Chicken : MonoBehaviour
             
             DeadCount += Time.deltaTime;
             anim.enabled = false;
-            if (DeadCount < 1)
+            if (DeadCount < 0.25)
             {
-                trans.Rotate(new Vector3(0, 0, -1.5f));
+                trans.Rotate(new Vector3(0, 0, -2f));
 
             }
             movevec = Vector3.zero;
         }
     }
-
+    void HpBar()
+    {
+        hpbar.rectTransform.localScale = new Vector3((float)curHealth / (float)maxHealth, 1, 1);
+    }
     void Move()
     {
         speed = Random.Range(1,3);

@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
         Getinput();
         Attack();
         Dodge();
+        Jump();
         Camera();
     }
 
@@ -52,7 +53,6 @@ public class Player : MonoBehaviour
         fDown = Input.GetButtonDown("Fire1");
         jDown = Input.GetButtonDown("Jump");
         DodgeDown = Input.GetButtonDown("Dodge");
-
     }
 
     void Camera()
@@ -87,25 +87,26 @@ public class Player : MonoBehaviour
         lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
         lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
         movedir = lookforward * moveVec.y + lookright * moveVec.x;
-
-
         if (isMove)
         {
             characterBody.forward = movedir;
-
         }
 
         if (!canAttack)
         {
             movedir = Vector3.zero;
         }
+      
+        transform.position += movedir * moveSpeed * Time.deltaTime;
+    }
+    void Jump()
+    {
         if (jDown && !isDodge)
         {
             rigid.AddForce(Vector3.up * 5, ForceMode.Impulse);
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
         }
-        transform.position += movedir * moveSpeed * Time.deltaTime;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -126,6 +127,7 @@ public class Player : MonoBehaviour
         canAttack = 0.6 < firedelay;
         if (fDown && canAttack && !isJump)
         {
+            characterBody.forward = new Vector3(cameraArm.forward.x,0,cameraArm.forward.z);
             weapon.Use();
             anim.SetTrigger("doAttack1");
             firedelay = 0;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     public int maxHealth;
@@ -12,6 +13,7 @@ public class Enemy : MonoBehaviour
     public bool isAttack;
     public bool isSearch;
     public bool isDead;
+    public Image hpbar;
 
     MeshRenderer [] meshs;
     NavMeshAgent nav;
@@ -24,6 +26,7 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
+        hpbar.rectTransform.localScale = new Vector3(1, 1, 1);
     }
 
     void ChaseStart()
@@ -54,6 +57,8 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        HpBar();
+
         if (nav.enabled && isSearch)
         {
             nav.SetDestination(Target.position);
@@ -64,6 +69,11 @@ public class Enemy : MonoBehaviour
             this.nav.velocity = Vector3.zero;
         }
 
+    }
+
+    void HpBar()
+    {
+        hpbar.rectTransform.localScale = new Vector3((float)curHealth / (float)maxHealth, 1, 1);
     }
 
 
@@ -137,7 +147,7 @@ public class Enemy : MonoBehaviour
 
             StartCoroutine(OnDamage(reactVec));
 
-                        
+
         }
     }
 
