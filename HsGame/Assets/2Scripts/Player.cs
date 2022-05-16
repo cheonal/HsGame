@@ -59,16 +59,7 @@ public class Player : MonoBehaviour
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngel = cameraArm.rotation.eulerAngles;
-        float x = camAngel.x - mouseDelta.y;
 
-        if (x < 180f)
-        {
-            x = Mathf.Clamp(x, -1f, 70f);
-        }
-        else
-        {
-            x = Mathf.Clamp(x, 335f, 361f);
-        }
         if (Input.GetKeyDown("q"))
         {
             rotateSensitivity -= 0.1f;
@@ -77,7 +68,7 @@ public class Player : MonoBehaviour
         {
             rotateSensitivity += 0.1f;
         }
-        cameraArm.rotation = Quaternion.Euler(x , camAngel.y + mouseDelta.x * rotateSensitivity, camAngel.z);
+        cameraArm.rotation = Quaternion.Euler(camAngel.x , camAngel.y + mouseDelta.x * rotateSensitivity, camAngel.z);
     }
     void Move()
     {
