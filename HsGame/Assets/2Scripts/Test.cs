@@ -123,7 +123,7 @@ public class Test : MonoBehaviour
         canAttack = 0.6 < firedelay;
         if (fDown && canAttack && !isJump)
         {
-            weapon.Use();
+           // weapon.Use();
             anim.SetTrigger("doAttack1");
             firedelay = 0;
         }

@@ -6,19 +6,32 @@ public class Player : MonoBehaviour
 {
     public int maxhealth;
     public int health;
+    public GameObject[] Weapons;
+
     public float rotateSensitivity;
     public float moveSpeed;
+
     bool canAttack = true;
     bool canDodge = true;
     bool isJump;
     bool fDown;
+    bool skill1Down;
+    bool skill2Down;
+    bool skill3Down;
+    bool skill4Down;
+    bool skillRDown;
+    bool sDown1;
+    bool sDown2;
     bool jDown;
     bool isDodge;
     bool DodgeDown;
     bool isDamage;
+    bool isSwap;
+    int hasweaponindex = 0;
     float firedelay;
     float dodgedelay;
-    public Weapon weapon;
+    public Weapon Sword;
+    public Weapon Wand;
 
     Rigidbody rigid;
     Animator anim;
@@ -45,6 +58,7 @@ public class Player : MonoBehaviour
         Attack();
         Dodge();
         Jump();
+        Swap();
         Camera();
     }
 
@@ -53,6 +67,14 @@ public class Player : MonoBehaviour
         fDown = Input.GetButtonDown("Fire1");
         jDown = Input.GetButtonDown("Jump");
         DodgeDown = Input.GetButtonDown("Dodge");
+        sDown1 = Input.GetButtonDown("Swap1");
+        sDown2 = Input.GetButtonDown("Swap2");
+        skill1Down = Input.GetButtonDown("Skill1");
+        skill2Down = Input.GetButtonDown("Skill2");
+        skill3Down = Input.GetButtonDown("Skill3");
+        skill4Down = Input.GetButtonDown("Skill4");
+        skillRDown = Input.GetButtonDown("SkillR");
+
     }
 
     void Camera()
@@ -60,11 +82,11 @@ public class Player : MonoBehaviour
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngel = cameraArm.rotation.eulerAngles;
 
-        if (Input.GetKeyDown("q"))
+        if (Input.GetKeyDown("["))
         {
             rotateSensitivity -= 0.1f;
         }
-        if (Input.GetKeyDown("e"))
+        if (Input.GetKeyDown("]"))
         {
             rotateSensitivity += 0.1f;
         }
@@ -78,12 +100,12 @@ public class Player : MonoBehaviour
         lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
         lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
         movedir = lookforward * moveVec.y + lookright * moveVec.x;
-        if (isMove)
+        if (isMove && canAttack)
         {
             characterBody.forward = movedir;
         }
 
-        if (!canAttack)
+        if (!canAttack || isSwap)
         {
             movedir = Vector3.zero;
         }
@@ -92,9 +114,10 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        if (jDown && !isDodge)
+        if (jDown && !isDodge && !isSwap && !isJump && canAttack)
         {
             rigid.AddForce(Vector3.up * 5, ForceMode.Impulse);
+            isJump = true;
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
         }
@@ -112,18 +135,97 @@ public class Player : MonoBehaviour
 
         }
     }
+    void Swap()
+    {
+        if (sDown1 && !isSwap && canAttack) // 소드
+        {
+            anim.SetTrigger("doSwap");
+            if(hasweaponindex == 1)
+            {
+                Weapons[1].SetActive(false);
+                Weapons[0].SetActive(false);
+                hasweaponindex = 0;
+                isSwap = true;
+                Invoke("Swapout", 0.5f);
+            }
+            else
+            {
+                Weapons[1].SetActive(false);
+                Weapons[0].SetActive(true);
+                hasweaponindex = 1;
+                isSwap = true;
+                Invoke("Swapout", 0.5f);
+            }
+        }
+        if (sDown2 && !isSwap && canAttack) //완드
+        {
+            anim.SetTrigger("doSwap");
+            if (hasweaponindex == 2)
+            {
+                Weapons[1].SetActive(false);
+                Weapons[0].SetActive(false);
+                hasweaponindex = 0;
+                isSwap = true;
+                Invoke("Swapout", 0.5f);
+            }
+            else
+            {
+
+                Weapons[0].SetActive(false);
+                Weapons[1].SetActive(true);
+                hasweaponindex = 2;
+                isSwap = true;
+                Invoke("Swapout", 0.5f);
+            }
+        }
+    }
+
+    void Swapout()
+    {
+        isSwap = false;
+    }
     void Attack()
     {
         firedelay += Time.deltaTime;
-        canAttack = 0.6 < firedelay;
-        if (fDown && canAttack && !isJump)
+        canAttack = 0.7 < firedelay;
+        if (fDown && canAttack && !isJump && hasweaponindex==1 && !isSwap)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x,0,cameraArm.forward.z);
-            weapon.Use();
+            Sword.Swing();
             anim.SetTrigger("doAttack1");
             firedelay = 0;
         }
+        else if ((skill1Down || skill2Down  || skill3Down || skill4Down || skillRDown) 
+            && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
+        {
+            characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
+            anim.SetTrigger("doShot");
+            firedelay = 0;  
+            if (skill1Down)
+            {
+                Wand.Magic1();
+            }
+            if (skill2Down)
+            {
+                Wand.Magic2();
+            }
+            if (skill3Down)
+            {
+                Wand.Magic3();
+            }
+            if (skill4Down)
+            {
+                Wand.Magic4();
+            }
+            if (skillRDown)
+            {
+                Wand.MagicR();
+            }
+
+        }
     }
+
+
 
     void Dodge()
     {
