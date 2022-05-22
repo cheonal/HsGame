@@ -9,6 +9,7 @@ TagManager:
   - Floor
   - Wall
   - Enemy Bullet
+  - Magic
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - EnemyBullet
   - hpfront
   - hpback
-  - 
+  - Magic
   - 
   - 
   - 

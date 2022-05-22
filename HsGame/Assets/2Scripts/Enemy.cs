@@ -147,7 +147,6 @@ public class Enemy : MonoBehaviour
 
             StartCoroutine(OnDamage(reactVec));
 
-
         }
     }
 

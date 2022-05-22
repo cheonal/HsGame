@@ -7,7 +7,7 @@ public class Chicken : MonoBehaviour
     public int maxHealth;
     public int curHealth;
     public Image hpbar;
-    public enum Type {A,B};
+    public enum Type { A, B };
     public Type enumType;
     public bool isDead;
     Transform trans;
@@ -43,7 +43,7 @@ public class Chicken : MonoBehaviour
         }
         if (isDead)
         {
-            
+
             DeadCount += Time.deltaTime;
             anim.enabled = false;
             if (DeadCount < 0.5)
@@ -60,7 +60,7 @@ public class Chicken : MonoBehaviour
     }
     void Move()
     {
-        speed = Random.Range(1,3);
+        speed = Random.Range(1, 3);
         movevec = new Vector3(Random.Range(0, 3), 0, Random.Range(0, 3)).normalized;
         Invoke("Move", 2);
     }
@@ -100,7 +100,7 @@ public class Chicken : MonoBehaviour
                 }
                 break;
         }
-        
+
     }
 
     IEnumerator Walk()
@@ -141,15 +141,21 @@ public class Chicken : MonoBehaviour
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.Damage;
-            Vector3 reactVec = transform.position - other.transform.position;
 
-            StartCoroutine(OnDamage(reactVec));
-
-
+            StartCoroutine(OnDamage());
         }
+
+        if (other.tag == "Magic")
+        {
+            Magic magic = other.GetComponent<Magic>();
+            curHealth -= magic.Damage;
+         
+            StartCoroutine(OnDamage());
+        }
+
     }
 
-    IEnumerator OnDamage(Vector3 reactVec)
+    IEnumerator OnDamage()
     {
         foreach (SkinnedMeshRenderer mesh in meshs)
         {
@@ -165,7 +171,7 @@ public class Chicken : MonoBehaviour
             }
 
         }
-        else if(curHealth <= 0)
+        else if (curHealth <= 0)
         {
             foreach (SkinnedMeshRenderer mesh in meshs)
             {
