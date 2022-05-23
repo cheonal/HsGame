@@ -140,15 +140,14 @@ public class Player : MonoBehaviour
         if (sDown1 && !isSwap && canAttack) // 소드
         {
             anim.SetTrigger("doSwap");
-            if(hasweaponindex == 1)
+            if(hasweaponindex == 1) // 소드를 들고있을때
             {
-                Weapons[1].SetActive(false);
                 Weapons[0].SetActive(false);
                 hasweaponindex = 0;
                 isSwap = true;
                 Invoke("Swapout", 0.5f);
             }
-            else
+            else //빈손,완드를 들고있을때
             {
                 Weapons[1].SetActive(false);
                 Weapons[0].SetActive(true);
@@ -160,15 +159,14 @@ public class Player : MonoBehaviour
         if (sDown2 && !isSwap && canAttack) //완드
         {
             anim.SetTrigger("doSwap");
-            if (hasweaponindex == 2)
+            if (hasweaponindex == 2) // 완드를 들고있을때
             {
                 Weapons[1].SetActive(false);
-                Weapons[0].SetActive(false);
                 hasweaponindex = 0;
                 isSwap = true;
                 Invoke("Swapout", 0.5f);
             }
-            else
+            else // 빈손,소드를 들고있을때
             {
 
                 Weapons[0].SetActive(false);

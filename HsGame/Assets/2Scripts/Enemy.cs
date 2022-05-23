@@ -73,7 +73,14 @@ public class Enemy : MonoBehaviour
 
     void HpBar()
     {
-        hpbar.rectTransform.localScale = new Vector3((float)curHealth / (float)maxHealth, 1, 1);
+        if (curHealth <= 0)
+        {
+            hpbar.rectTransform.localScale = new Vector3(0, 1, 1);
+        }
+        else
+        {
+            hpbar.rectTransform.localScale = new Vector3((float)curHealth / (float)maxHealth, 1, 1);
+        }
     }
 
 
