@@ -7,8 +7,10 @@ public class Weapon : MonoBehaviour
     public BoxCollider meleeArea;
     public TrailRenderer traileffect;
     public int Damage;
-    public Transform magicPos;
+    public Transform magic1Pos;
+    public Transform magic2Pos;
     public GameObject magic1;
+    public GameObject magic2;
     public enum Type {Melee,Range};
     public Type type;
 
@@ -51,26 +53,23 @@ public class Weapon : MonoBehaviour
     IEnumerator Skill1()
     {
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("succes1");
+        Instantiate(magic1, magic1Pos.position, magic1Pos.rotation);
     }
     IEnumerator Skill2()
     {
         yield return new WaitForSeconds(0.1f);
-        Instantiate(magic1, magicPos.position, magicPos.rotation);
+        Instantiate(magic2, magic2Pos.position, magic2Pos.rotation);
     }
     IEnumerator Skill3()
     {
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("succes3");
     }
     IEnumerator Skill4()
     {
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("succes4");
     }
     IEnumerator SkillR()
     {
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("succes5");
     }
 }

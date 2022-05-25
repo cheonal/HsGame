@@ -151,9 +151,24 @@ public class Enemy : MonoBehaviour
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.Damage;
             Vector3 reactVec = transform.position - other.transform.position;
-
             StartCoroutine(OnDamage(reactVec));
 
+        }
+
+        else if (other.tag == "MagicArea")
+        {
+            MagicArea magic = other.GetComponent<MagicArea>();
+            Vector3 reactVec = transform.position - other.transform.position;
+            curHealth -= magic.Damage;
+            StartCoroutine(OnDamage(reactVec));
+        }
+
+        else if (other.tag == "MagicArrow")
+        {
+            MagicArrow magic = other.GetComponent<MagicArrow>();
+            Vector3 reactVec = transform.position - other.transform.position;
+            curHealth -= magic.Damage;
+            StartCoroutine(OnDamage(reactVec));
         }
     }
 

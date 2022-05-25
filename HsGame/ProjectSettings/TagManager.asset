@@ -9,7 +9,8 @@ TagManager:
   - Floor
   - Wall
   - Enemy Bullet
-  - Magic
+  - MagicArrow
+  - MagicArea
   layers:
   - Default
   - TransparentFX

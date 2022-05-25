@@ -152,11 +152,19 @@ public class Chicken : MonoBehaviour
             StartCoroutine(OnDamage());
         }
 
-        if (other.tag == "Magic")
+        if (other.tag == "MagicArrow")
         {
-            Magic magic = other.GetComponent<Magic>();
+            MagicArrow magic = other.GetComponent<MagicArrow>();
+
             curHealth -= magic.Damage;
-         
+            StartCoroutine(OnDamage());
+        }
+
+        if (other.tag == "MagicArea")
+        {
+            MagicArea magic = other.GetComponent<MagicArea>();
+
+            curHealth -= magic.Damage;
             StartCoroutine(OnDamage());
         }
 
