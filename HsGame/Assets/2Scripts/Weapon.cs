@@ -9,8 +9,10 @@ public class Weapon : MonoBehaviour
     public int Damage;
     public Transform magic1Pos;
     public Transform magic2Pos;
+
     public GameObject magic1;
     public GameObject magic2;
+    public GameObject magic3;
     public enum Type {Melee,Range};
     public Type type;
 
@@ -63,6 +65,7 @@ public class Weapon : MonoBehaviour
     IEnumerator Skill3()
     {
         yield return new WaitForSeconds(0.1f);
+        Instantiate(magic3, magic2Pos.position, magic2Pos.rotation);
     }
     IEnumerator Skill4()
     {

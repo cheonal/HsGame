@@ -8,6 +8,8 @@ public class MagicArrow : MonoBehaviour
     public GameObject Explode;
     public GameObject MagicObj;
     Rigidbody rigid;
+    public enum Type {skill2,skill3};
+    public Type enumType;
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -15,7 +17,17 @@ public class MagicArrow : MonoBehaviour
     void Start()
     {
         MagicObj = Instantiate(MagicObj, transform.position, transform.rotation);
-        rigid.velocity = transform.forward * 50;       
+        switch (enumType)
+        {
+            case Type.skill2:
+                rigid.velocity = transform.forward * 50;
+                break;
+
+            case Type.skill3:
+                rigid.velocity = transform.forward * 80;
+                break;
+        }
+     
     }
     void Update()
     {
@@ -27,21 +39,24 @@ public class MagicArrow : MonoBehaviour
         {
             Explode = Instantiate(Explode, transform.position, transform.rotation);
             rigid.velocity = Vector3.zero;
-            Destroy(MagicObj, 1.2f);
+            Destroy(MagicObj, 0.5f);
             Destroy(Explode, 2f);
             Destroy(gameObject, 1f);
         }
-
         if (other.gameObject.tag == "Enemy")
         {
             Explode = Instantiate(Explode, transform.position, transform.rotation);
-            rigid.velocity = Vector3.zero;
-            Destroy(MagicObj, 1.2f);
             Destroy(Explode, 2f);
-            Destroy(gameObject, 1f);
+            switch (enumType)
+            {
+                case Type.skill2:
+                    {
+                        rigid.velocity = Vector3.zero;
+                        Destroy(MagicObj, 0.5f);
+                        Destroy(gameObject, 1f);
+                    }
+                    break;
+            }
         }
     }
-
-    
-
 }
