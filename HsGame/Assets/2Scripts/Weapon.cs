@@ -9,14 +9,18 @@ public class Weapon : MonoBehaviour
     public int Damage;
     public Transform magic1Pos;
     public Transform magic2Pos;
-
+    public Transform magic4Pos;
     public GameObject magic1;
     public GameObject magic2;
     public GameObject magic3;
+    public GameObject magic4;
+    public GameObject magicRStart;
+    GameObject magicRstart;
+    public GameObject magicRsucces;
     public enum Type {Melee,Range};
     public Type type;
 
-
+    
     public void Swing()
     {
         StartCoroutine("Ataack1");
@@ -37,10 +41,20 @@ public class Weapon : MonoBehaviour
     {
         StartCoroutine("Skill4");
     }
-    public void MagicR()
+    public void MagicRstart()
     {
-        StartCoroutine("SkillR");
+        magicRstart = Instantiate(magicRStart, magic2Pos.position, magic2Pos.rotation);
     }
+    public void MagicRUp()
+    {
+        Destroy(magicRstart);
+    }
+    public void MagicRsucces()
+    {
+        StartCoroutine("SkillRsucces");
+    }
+
+
     IEnumerator Ataack1()
     {
         yield return new WaitForSeconds(0.1f);
@@ -49,7 +63,7 @@ public class Weapon : MonoBehaviour
 
         yield return new WaitForSeconds(0.6f);
         meleeArea.enabled = false;
-       traileffect.enabled = false;
+        traileffect.enabled = false;
 
     }
     IEnumerator Skill1()
@@ -70,9 +84,11 @@ public class Weapon : MonoBehaviour
     IEnumerator Skill4()
     {
         yield return new WaitForSeconds(0.1f);
+        Instantiate(magic4, magic4Pos.position, magic4Pos.rotation);
     }
-    IEnumerator SkillR()
+    IEnumerator SkillRsucces()
     {
         yield return new WaitForSeconds(0.1f);
+        Instantiate(magicRsucces, magic2Pos.position, magic2Pos.rotation);
     }
 }

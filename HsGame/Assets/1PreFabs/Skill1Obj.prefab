@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8280825378727075665}
   - component: {fileID: 8280825378746472977}
   - component: {fileID: 8280825378746442673}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4827,7 +4827,7 @@ GameObject:
   - component: {fileID: 8280825378727075667}
   - component: {fileID: 8280825378746472979}
   - component: {fileID: 8280825378746442675}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9641,9 +9641,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8280825378727075669}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Skill1Obj
-  m_TagString: Untagged
+  m_TagString: MagicArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9676,7 +9676,7 @@ GameObject:
   - component: {fileID: 8280825378727075671}
   - component: {fileID: 8280825378746472983}
   - component: {fileID: 8280825378746442679}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}

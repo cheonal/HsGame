@@ -8,7 +8,7 @@ public class MagicArrow : MonoBehaviour
     public GameObject Explode;
     public GameObject MagicObj;
     Rigidbody rigid;
-    public enum Type {skill2,skill3};
+    public enum Type {skill2,skill3,skill5};
     public Type enumType;
     void Awake()
     {
@@ -26,6 +26,9 @@ public class MagicArrow : MonoBehaviour
             case Type.skill3:
                 rigid.velocity = transform.forward * 80;
                 break;
+            case Type.skill5:
+                rigid.velocity = transform.forward * 100;
+                break;
         }
      
     }
@@ -41,7 +44,7 @@ public class MagicArrow : MonoBehaviour
             rigid.velocity = Vector3.zero;
             Destroy(MagicObj, 0.5f);
             Destroy(Explode, 2f);
-            Destroy(gameObject, 1f);
+            Destroy(gameObject, 0.5f);
         }
         if (other.gameObject.tag == "Enemy")
         {
@@ -53,7 +56,7 @@ public class MagicArrow : MonoBehaviour
                     {
                         rigid.velocity = Vector3.zero;
                         Destroy(MagicObj, 0.5f);
-                        Destroy(gameObject, 1f);
+                        Destroy(gameObject, 0.5f);
                     }
                     break;
             }

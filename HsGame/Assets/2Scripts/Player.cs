@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     bool skill3Down;
     bool skill4Down;
     bool skillRDown;
+    bool skillRcast;
+    bool skillRUp;
     bool sDown1;
     bool sDown2;
     bool jDown;
@@ -27,9 +29,11 @@ public class Player : MonoBehaviour
     bool DodgeDown;
     bool isDamage;
     bool isSwap;
+    bool isCasting;
     int hasweaponindex = 0;
     float firedelay;
     float dodgedelay;
+    float skillRcasting;
     public Weapon Sword;
     public Weapon Wand;
 
@@ -74,6 +78,8 @@ public class Player : MonoBehaviour
         skill3Down = Input.GetButtonDown("Skill3");
         skill4Down = Input.GetButtonDown("Skill4");
         skillRDown = Input.GetButtonDown("SkillR");
+        skillRcast = Input.GetButton("SkillR");
+        skillRUp = Input.GetButtonUp("SkillR");
 
     }
 
@@ -100,12 +106,12 @@ public class Player : MonoBehaviour
         lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
         lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
         movedir = lookforward * moveVec.y + lookright * moveVec.x;
-        if (isMove && canAttack)
+        if (isMove && canAttack && !isCasting)
         {
             characterBody.forward = movedir;
         }
 
-        if (!canAttack || isSwap)
+        if (!canAttack || isSwap || isCasting)
         {
             movedir = Vector3.zero;
         }
@@ -114,7 +120,7 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        if (jDown && !isDodge && !isSwap && !isJump && canAttack)
+        if (jDown && !isDodge && !isSwap && !isJump && canAttack && !isCasting)
         {
             rigid.AddForce(Vector3.up * 5, ForceMode.Impulse);
             isJump = true;
@@ -137,7 +143,7 @@ public class Player : MonoBehaviour
     }
     void Swap()
     {
-        if (sDown1 && !isSwap && canAttack) // 소드
+        if (sDown1 && !isSwap && canAttack && !isCasting) // 소드
         {
             anim.SetTrigger("doSwap");
             if(hasweaponindex == 1) // 소드를 들고있을때
@@ -156,7 +162,7 @@ public class Player : MonoBehaviour
                 Invoke("Swapout", 0.5f);
             }
         }
-        if (sDown2 && !isSwap && canAttack) //완드
+        if (sDown2 && !isSwap && canAttack && !isCasting) //완드
         {
             anim.SetTrigger("doSwap");
             if (hasweaponindex == 2) // 완드를 들고있을때
@@ -186,19 +192,19 @@ public class Player : MonoBehaviour
     {
         firedelay += Time.deltaTime;
         canAttack = 0.7 < firedelay;
-        if (fDown && canAttack && !isJump && hasweaponindex==1 && !isSwap)
+        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap)
         {
-            characterBody.forward = new Vector3(cameraArm.forward.x,0,cameraArm.forward.z);
+            characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Sword.Swing();
             anim.SetTrigger("doAttack1");
             firedelay = 0;
         }
-        else if ((skill1Down || skill2Down  || skill3Down || skill4Down || skillRDown) 
+        else if ((skill1Down || skill2Down || skill3Down || skill4Down)
             && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             anim.SetTrigger("doShot");
-            firedelay = 0;  
+            firedelay = 0;
             if (skill1Down)
             {
                 Wand.Magic1();
@@ -215,12 +221,29 @@ public class Player : MonoBehaviour
             {
                 Wand.Magic4();
             }
-            if (skillRDown)
-            {
-                Wand.MagicR();
-            }
-
         }
+        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
+        {
+            characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
+            Wand.MagicRstart();
+        }
+        if (skillRcast)
+        {
+            isCasting = true;
+            anim.SetTrigger("doShot");
+            skillRcasting += Time.deltaTime;
+        }
+        if (skillRUp)
+        {
+            isCasting = false;
+            Wand.MagicRUp();
+            if (skillRcasting >= 1)
+            {
+                Wand.MagicRsucces();
+            }
+            skillRcasting = 0;
+        }
+
     }
 
 

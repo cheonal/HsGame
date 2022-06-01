@@ -11,6 +11,7 @@ TagManager:
   - Enemy Bullet
   - MagicArrow
   - MagicArea
+  - MagicStart
   layers:
   - Default
   - TransparentFX
