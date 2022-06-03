@@ -19,11 +19,24 @@ public class Weapon : MonoBehaviour
     public GameObject magicRsucces;
     public enum Type {Melee,Range};
     public Type type;
+    public bool cast;
 
-    
+
+
     public void Swing()
     {
         StartCoroutine("Ataack1");
+    }
+    IEnumerator Ataack1()
+    {
+        yield return new WaitForSeconds(0.1f);
+        meleeArea.enabled = true;
+        traileffect.enabled = true;
+
+        yield return new WaitForSeconds(0.6f);
+        meleeArea.enabled = false;
+        traileffect.enabled = false;
+
     }
     public void Magic1()
     {
@@ -41,31 +54,7 @@ public class Weapon : MonoBehaviour
     {
         StartCoroutine("Skill4");
     }
-    public void MagicRstart()
-    {
-        magicRstart = Instantiate(magicRStart, magic2Pos.position, magic2Pos.rotation);
-    }
-    public void MagicRUp()
-    {
-        Destroy(magicRstart);
-    }
-    public void MagicRsucces()
-    {
-        StartCoroutine("SkillRsucces");
-    }
-
-
-    IEnumerator Ataack1()
-    {
-        yield return new WaitForSeconds(0.1f);
-        meleeArea.enabled = true;
-        traileffect.enabled = true;
-
-        yield return new WaitForSeconds(0.6f);
-        meleeArea.enabled = false;
-        traileffect.enabled = false;
-
-    }
+   
     IEnumerator Skill1()
     {
         yield return new WaitForSeconds(0.1f);
@@ -85,6 +74,24 @@ public class Weapon : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         Instantiate(magic4, magic4Pos.position, magic4Pos.rotation);
+    }
+    public void MagicRstart()
+    {
+        StartCoroutine("SkillRstart");
+    }
+    IEnumerator SkillRstart()   
+    {
+        yield return new WaitForSeconds(0.0005f);
+        magicRstart = Instantiate(magicRStart, magic2Pos.position, magic2Pos.rotation);
+    }
+    public void MagicRUp()
+    {
+        cast = false;
+        Destroy(magicRstart);
+    }
+    public void MagicRsucces()
+    {
+        StartCoroutine("SkillRsucces");
     }
     IEnumerator SkillRsucces()
     {

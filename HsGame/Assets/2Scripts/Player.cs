@@ -226,8 +226,9 @@ public class Player : MonoBehaviour
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Wand.MagicRstart();
+            Wand.MagicRUp();
         }
-        if (skillRcast)
+        if (skillRcast && hasweaponindex == 2 && !isJump)
         {
             isCasting = true;
             anim.SetTrigger("doShot");
@@ -235,15 +236,18 @@ public class Player : MonoBehaviour
         }
         if (skillRUp)
         {
-            isCasting = false;
             Wand.MagicRUp();
+            Invoke("Magicout", 0.7f);
             if (skillRcasting >= 1)
             {
                 Wand.MagicRsucces();
             }
             skillRcasting = 0;
         }
-
+    }
+    void Magicout()
+    {
+        isCasting = false;
     }
 
 
