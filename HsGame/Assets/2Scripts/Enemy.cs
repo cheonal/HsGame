@@ -68,7 +68,6 @@ public class Enemy : MonoBehaviour
         {
             this.nav.velocity = Vector3.zero;
         }
-
     }
 
     void HpBar()
@@ -152,9 +151,7 @@ public class Enemy : MonoBehaviour
             curHealth -= weapon.Damage;
             Vector3 reactVec = transform.position - other.transform.position;
             StartCoroutine(OnDamage(reactVec));
-
         }
-
         else if (other.tag == "MagicArea")
         {
             MagicArea magic = other.GetComponent<MagicArea>();
@@ -198,19 +195,12 @@ public class Enemy : MonoBehaviour
                 isChase = false;
                 nav.enabled = false;
                 anim.SetTrigger("doDie");
-
                 reactVec = reactVec.normalized;
                 reactVec += Vector3.up;
                 rigid.AddForce(reactVec, ForceMode.Impulse);
-
             }
-
             Destroy(gameObject, 4);
+            Player.player.curexp += 15;
         }
-
-
-
-
-
     }
 }

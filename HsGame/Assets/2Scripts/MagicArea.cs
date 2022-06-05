@@ -16,7 +16,7 @@ public class MagicArea : MonoBehaviour
         {
             case Type.skill1:
                 StartCoroutine("Magic1Start");
-                Invoke("Magic1End", 10f);
+                Invoke("Magic1End", 5f);
                 break;
 
             case Type.skill4:

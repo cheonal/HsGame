@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int maxhealth;
-    public int health;
+    public float maxhealth = 100;
+    public float curhealth = 100;
+    public float maxmana = 100;
+    public float curmana = 100;
+    public float maxexp = 100;
+    public float curexp = 0;
     public GameObject[] Weapons;
-
+    public static Player player;
     public float rotateSensitivity;
     public float moveSpeed;
 
@@ -22,6 +26,15 @@ public class Player : MonoBehaviour
     bool skillRDown;
     bool skillRcast;
     bool skillRUp;
+
+    public bool skill1coolDown;
+    public bool skill2coolDown;
+    public bool skill3coolDown;
+    public bool skill4coolDown;
+    public bool skillRcoolDown;
+
+
+
     bool sDown1;
     bool sDown2;
     bool jDown;
@@ -29,7 +42,7 @@ public class Player : MonoBehaviour
     bool DodgeDown;
     bool isDamage;
     bool isSwap;
-    bool isCasting;
+    public bool isCasting;
     int hasweaponindex = 0;
     float firedelay;
     float dodgedelay;
@@ -48,6 +61,11 @@ public class Player : MonoBehaviour
     public Transform characterBody;
     public Camera followCamera;
 
+    public void Start()
+    {
+        player = this.GetComponent<Player>();
+       
+    }
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -135,10 +153,9 @@ public class Player : MonoBehaviour
             if (!isDamage)
             {
                 Bullet enemyBullet = other.GetComponent<Bullet>();
-                health -= enemyBullet.damage;
+                curhealth -= enemyBullet.damage;
                 StartCoroutine(OnDamage());
             }
-
         }
     }
     void Swap()
@@ -188,7 +205,7 @@ public class Player : MonoBehaviour
     {
         isSwap = false;
     }
-    void Attack()
+    public void Attack()
     {
         firedelay += Time.deltaTime;
         canAttack = 0.7 < firedelay;
@@ -202,48 +219,94 @@ public class Player : MonoBehaviour
         else if ((skill1Down || skill2Down || skill3Down || skill4Down)
             && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
         {
-            characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
-            anim.SetTrigger("doShot");
-            firedelay = 0;
-            if (skill1Down)
+            characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);    
+            if (skill1Down && !skill1coolDown)
             {
+                curmana -= 10;
+                skill1coolDown = true;
+                anim.SetTrigger("doShot");
                 Wand.Magic1();
+                Invoke("Skill1cool",5f);
+                firedelay = -0.2f;
             }
-            if (skill2Down)
+            if (skill2Down && !skill2coolDown)
             {
+                curmana -= 10;
+                skill2coolDown = true;
+                anim.SetTrigger("doShot");
                 Wand.Magic2();
+                Invoke("Skill2cool", 2f);
+                firedelay = -0.2f;
             }
-            if (skill3Down)
+            if (skill3Down && !skill3coolDown)
             {
+                curmana -= 10;
+                skill3coolDown = true;
+                anim.SetTrigger("doShot");
                 Wand.Magic3();
+                Invoke("Skill3cool", 3f);
+                firedelay = -0.2f;
             }
-            if (skill4Down)
+            if (skill4Down && !skill4coolDown)
             {
+                curmana -= 10;
+                skill4coolDown = true;
+                anim.SetTrigger("doShot");
                 Wand.Magic4();
+                Invoke("Skill4cool", 1f);
+                firedelay = -0.2f;
             }
         }
-        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
+        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Wand.MagicRstart();
             Wand.MagicRUp();
         }
-        if (skillRcast && hasweaponindex == 2 && !isJump)
+        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown)
         {
             isCasting = true;
             anim.SetTrigger("doShot");
             skillRcasting += Time.deltaTime;
+            if(skillRcasting >= 3)
+            {
+                skillRUp = true;
+            }
         }
-        if (skillRUp)
+        if (skillRUp && !skillRcoolDown)
         {
             Wand.MagicRUp();
             Invoke("Magicout", 0.7f);
             if (skillRcasting >= 1)
             {
+                curmana -= 20;
                 Wand.MagicRsucces();
+                Invoke("SkillRcool", 10f);
+                skillRcoolDown = true;
             }
             skillRcasting = 0;
+            isCasting = false;
         }
+    }
+    void Skill1cool()
+    {
+        skill1coolDown = false;
+    }
+    void Skill2cool()
+    {
+        skill2coolDown = false;
+    }
+    void Skill3cool()
+    {
+        skill3coolDown = false;
+    }
+    void Skill4cool()
+    {
+        skill4coolDown = false;
+    }
+    void SkillRcool()
+    {
+        skillRcoolDown = false;
     }
     void Magicout()
     {
@@ -263,7 +326,6 @@ public class Player : MonoBehaviour
             anim.SetTrigger("doDodge");
             dodgedelay = 0;
             Invoke("Dodgeout", 0.5f);
-
         }
     }
 
