@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Gamemanager : MonoBehaviour
 {
+    public Player player;
     public RectTransform skillR;
     public RectTransform skillRGuageFront;
     public RectTransform skillRGuagesucces;
@@ -16,7 +17,9 @@ public class Gamemanager : MonoBehaviour
     public RectTransform PlayerHp;
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
-
+    public Text Lv;
+    
+    
     float skill1;
     float skill2;
     float skill3;
@@ -26,19 +29,31 @@ public class Gamemanager : MonoBehaviour
 
     void Update()
     {
+        
         SkillCoolDown();
         SkillR();
         State();
+        LvUp();
     }
     void State()
-    {
+    { 
         PlayerHp.localScale = new Vector2((float)(Player.player.curhealth / Player.player.maxhealth), 1);
         PlayerMp.localScale = new Vector2((float)(Player.player.curmana / Player.player.maxmana), 1);
         PlayerExp.localScale = new Vector2((float)(Player.player.curexp / Player.player.maxexp), 1);
+        Lv.text = "" + player.PlayerLv;
+    }
+    void LvUp()
+    {
+        if (player.curexp > player.maxexp)
+        {
+            player.PlayerLv += 1;
+            player.curexp -= player.maxexp;
+            player.maxexp += 10;
+        }
     }
     void SkillCoolDown()
     {
-        if (Player.player.skill1coolDown) // skill1
+        if (player.skill1coolDown) // skill1
         {
             skill1CoolDown.anchoredPosition = Vector2.zero;
             skill1 += Time.deltaTime;
@@ -50,7 +65,7 @@ public class Gamemanager : MonoBehaviour
             skill1CoolDown.anchoredPosition = Vector2.down * 200;
             skill1CoolDown.localScale = new Vector2(1, 1);
         }
-        if (Player.player.skill2coolDown) // skill2
+        if (player.skill2coolDown) // skill2
         {
             skill2CoolDown.anchoredPosition = Vector2.zero;
             skill2 += Time.deltaTime;
@@ -62,7 +77,7 @@ public class Gamemanager : MonoBehaviour
             skill2CoolDown.anchoredPosition = Vector2.down * 200;
             skill2CoolDown.localScale = new Vector2(1, 1);
         }
-        if (Player.player.skill3coolDown) //skill3
+        if (player.skill3coolDown) //skill3
         {
             skill3CoolDown.anchoredPosition = Vector2.zero;
             skill3 += Time.deltaTime;
@@ -74,7 +89,7 @@ public class Gamemanager : MonoBehaviour
             skill3CoolDown.anchoredPosition = Vector2.down * 200;
             skill3CoolDown.localScale = new Vector2(1, 1);
         }
-        if (Player.player.skill4coolDown)
+        if (player.skill4coolDown)
         {
             skill4CoolDown.anchoredPosition = Vector2.zero;
             skill4 += Time.deltaTime;
@@ -86,7 +101,7 @@ public class Gamemanager : MonoBehaviour
             skill4CoolDown.anchoredPosition = Vector2.down * 200;
             skill4CoolDown.localScale = new Vector2(1, 1);
         }
-        if (Player.player.skillRcoolDown)
+        if (player.skillRcoolDown)
         {
             skill5CoolDown.anchoredPosition = Vector2.zero;
             skill5 += Time.deltaTime;
@@ -102,7 +117,7 @@ public class Gamemanager : MonoBehaviour
     void SkillR()
     {
 
-        if (Player.player.isCasting == true && Guage<1f)
+        if (player.isCasting == true && Guage<1f)
         {
             skillR.anchoredPosition = Vector3.up * 350;
             Guage += Time.deltaTime;
@@ -111,7 +126,7 @@ public class Gamemanager : MonoBehaviour
                 skillRGuagesucces.anchoredPosition = Vector3.up * 350;
             }
         }
-        if (Player.player.isCasting == false)
+        if (player.isCasting == false)
         {
             skillR.anchoredPosition = Vector3.down * 1000;
             skillRGuagesucces.anchoredPosition = Vector3.down * 1000;

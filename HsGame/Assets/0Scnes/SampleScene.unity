@@ -567,6 +567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef5f3c4eacf3f448afbf2320378095d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 933848422}
   skillR: {fileID: 796666504}
   skillRGuageFront: {fileID: 284016024}
   skillRGuagesucces: {fileID: 892097733}
@@ -578,6 +579,7 @@ MonoBehaviour:
   PlayerHp: {fileID: 1414607128}
   PlayerMp: {fileID: 1539975008}
   PlayerExp: {fileID: 69739329}
+  Lv: {fileID: 1744936025}
 --- !u!4 &96137277
 Transform:
   m_ObjectHideFlags: 0
@@ -3084,6 +3086,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 876208223}
   m_CullTransparentMesh: 1
+--- !u!1 &884887998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 884887999}
+  - component: {fileID: 884888000}
+  m_Layer: 11
+  m_Name: MagicDistance
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &884887999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884887998}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1105092594}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &884888000
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884887998}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100, y: 5, z: 1}
+  m_Center: {x: 0, y: 2.5, z: 50}
 --- !u!1 &892097732
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,6 +3412,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1996233478557877724, guid: 74c74118fb84ea74d806cb9a4d04e21c, type: 3}
   m_PrefabInstance: {fileID: 928648839}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &933848422 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1996233479014475448, guid: 74c74118fb84ea74d806cb9a4d04e21c, type: 3}
+  m_PrefabInstance: {fileID: 928648839}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 368af1884c4caa24f8b65bba080b711b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &958294713
 GameObject:
   m_ObjectHideFlags: 0
@@ -3666,6 +3723,50 @@ Transform:
   m_Father: {fileID: 988971452}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &1073089959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1073089960}
+  - component: {fileID: 1073089961}
+  m_Layer: 11
+  m_Name: MagicDistance
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1073089960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1073089959}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1105092594}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1073089961
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1073089959}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100, y: 5, z: 1}
+  m_Center: {x: 0, y: 2.5, z: 50}
 --- !u!1 &1088528086
 GameObject:
   m_ObjectHideFlags: 0
@@ -3989,6 +4090,11 @@ Transform:
   m_Father: {fileID: 988971452}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!4 &1105092594 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3617910018863947265, guid: 74c74118fb84ea74d806cb9a4d04e21c, type: 3}
+  m_PrefabInstance: {fileID: 928648839}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1111694380
 GameObject:
   m_ObjectHideFlags: 0
@@ -4840,7 +4946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8199537722946685316, guid: 8d311b88e57bdf6498b705ff564e0949, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8199537722946685317, guid: 8d311b88e57bdf6498b705ff564e0949, type: 3}
       propertyPath: Target
@@ -6137,6 +6243,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1744936023}
   m_CullTransparentMesh: 1
+--- !u!1 &1753914401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1753914402}
+  - component: {fileID: 1753914403}
+  m_Layer: 11
+  m_Name: MagicDistance
+  m_TagString: Wall
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1753914402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753914401}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1105092594}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!65 &1753914403
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753914401}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100, y: 5, z: 1}
+  m_Center: {x: 0, y: 2.5, z: 50}
 --- !u!1 &1796544282
 GameObject:
   m_ObjectHideFlags: 0

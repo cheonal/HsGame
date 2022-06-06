@@ -10,11 +10,13 @@ public class Player : MonoBehaviour
     public float curmana = 100;
     public float maxexp = 100;
     public float curexp = 0;
+    public int PlayerLv =1;
     public GameObject[] Weapons;
     public static Player player;
     public float rotateSensitivity;
     public float moveSpeed;
 
+    
     bool canAttack = true;
     bool canDodge = true;
     bool isJump;
@@ -34,7 +36,10 @@ public class Player : MonoBehaviour
     public bool skillRcoolDown;
 
 
-
+    bool iswallF;
+    bool iswallR;
+    bool iswallL;
+    bool isborder;
     bool sDown1;
     bool sDown2;
     bool jDown;
@@ -49,7 +54,6 @@ public class Player : MonoBehaviour
     float skillRcasting;
     public Weapon Sword;
     public Weapon Wand;
-
     Rigidbody rigid;
     Animator anim;
     MeshRenderer[] meshs;
@@ -118,6 +122,7 @@ public class Player : MonoBehaviour
     }
     void Move()
     {
+
         Vector3 moveVec = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         bool isMove = moveVec.magnitude != 0;
         anim.SetBool("isRun", isMove);
@@ -133,8 +138,12 @@ public class Player : MonoBehaviour
         {
             movedir = Vector3.zero;
         }
+        if (!iswallF && !iswallL && !iswallR)
+        {
+            transform.position += movedir * moveSpeed * Time.deltaTime;
+        }
       
-        transform.position += movedir * moveSpeed * Time.deltaTime;
+        
     }
     void Jump()
     {
@@ -220,7 +229,7 @@ public class Player : MonoBehaviour
             && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);    
-            if (skill1Down && !skill1coolDown)
+            if (skill1Down && !skill1coolDown && curmana > 0)
             {
                 curmana -= 10;
                 skill1coolDown = true;
@@ -229,7 +238,7 @@ public class Player : MonoBehaviour
                 Invoke("Skill1cool",5f);
                 firedelay = -0.2f;
             }
-            if (skill2Down && !skill2coolDown)
+            if (skill2Down && !skill2coolDown && curmana > 0)
             {
                 curmana -= 10;
                 skill2coolDown = true;
@@ -238,7 +247,7 @@ public class Player : MonoBehaviour
                 Invoke("Skill2cool", 2f);
                 firedelay = -0.2f;
             }
-            if (skill3Down && !skill3coolDown)
+            if (skill3Down && !skill3coolDown && curmana > 0)
             {
                 curmana -= 10;
                 skill3coolDown = true;
@@ -247,7 +256,7 @@ public class Player : MonoBehaviour
                 Invoke("Skill3cool", 3f);
                 firedelay = -0.2f;
             }
-            if (skill4Down && !skill4coolDown)
+            if (skill4Down && !skill4coolDown && curmana > 0)
             {
                 curmana -= 10;
                 skill4coolDown = true;
@@ -257,13 +266,13 @@ public class Player : MonoBehaviour
                 firedelay = -0.2f;
             }
         }
-        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown)
+        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Wand.MagicRstart();
             Wand.MagicRUp();
         }
-        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown)
+        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown && curmana > 0)
         {
             isCasting = true;
             anim.SetTrigger("doShot");
@@ -273,7 +282,7 @@ public class Player : MonoBehaviour
                 skillRUp = true;
             }
         }
-        if (skillRUp && !skillRcoolDown)
+        if (skillRUp && !skillRcoolDown && curmana > 0)
         {
             Wand.MagicRUp();
             Invoke("Magicout", 0.7f);
@@ -284,6 +293,7 @@ public class Player : MonoBehaviour
                 Invoke("SkillRcool", 10f);
                 skillRcoolDown = true;
             }
+            firedelay = -0.2f;
             skillRcasting = 0;
             isCasting = false;
         }
@@ -359,6 +369,15 @@ public class Player : MonoBehaviour
         moveSpeed *= 0.5f;
         isDodge = false;
     }
+    void StopToWall()
+    {
+        iswallR = Physics.Raycast(characterBody.position, characterBody.forward, 1, LayerMask.GetMask("Wall"));
+        iswallL = Physics.Raycast(characterBody.position + characterBody.right * 2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
+        iswallF = Physics.Raycast(characterBody.position + characterBody.right * -2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
+        Debug.DrawRay(characterBody.position, characterBody.forward  * 1 ,Color.green);
+        Debug.DrawRay(characterBody.position + characterBody.right* 2, characterBody.forward * 2 ,Color.green);
+        Debug.DrawRay(characterBody.position + characterBody.right*-2, characterBody.forward * 2 ,Color.green);
+    }
     void FrezzeRotaiton()
     {
         rigid.angularVelocity = Vector3.zero;
@@ -367,6 +386,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         FrezzeRotaiton();
+        StopToWall();
     }
 
 
