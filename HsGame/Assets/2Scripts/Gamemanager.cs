@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Gamemanager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    //public static GameManager manager;
     public Player player;
     public RectTransform skillR;
     public RectTransform skillRGuageFront;
@@ -17,8 +18,13 @@ public class Gamemanager : MonoBehaviour
     public RectTransform PlayerHp;
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
+    public GameObject PlayerState;
+    public GameObject ScanObj;
+    public GameObject NpcTalk;
     public Text Lv;
-    
+    public Text TalkText;
+
+    public bool isTalk;
     
     float skill1;
     float skill2;
@@ -28,12 +34,12 @@ public class Gamemanager : MonoBehaviour
     float Guage;
 
     void Update()
-    {
-        
+    { 
         SkillCoolDown();
         SkillR();
         State();
         LvUp();
+       // Talk(GameObject scanObject);
     }
     void State()
     { 
@@ -133,6 +139,24 @@ public class Gamemanager : MonoBehaviour
             Guage = 0;
         }
         skillRGuageFront.localScale = new Vector3(Guage * 100 / 100, 1, 1);
+    }
+    public void Talk(GameObject scanObject)
+    {
+        if (isTalk)
+        {
+            isTalk = false;
+            PlayerState.SetActive(false);
+            NpcTalk.SetActive(true);
+        }
+        else
+        {
+            isTalk = true;
+            PlayerState.SetActive(true);
+            ScanObj = scanObject;
+            TalkText.text = ScanObj.name;   
+        }
+        NpcTalk.SetActive(isTalk);
+
     }
 }
 

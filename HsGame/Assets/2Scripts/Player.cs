@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameManager manager;
     public float maxhealth = 100;
     public float curhealth = 100;
     public float maxmana = 100;
     public float curmana = 100;
     public float maxexp = 100;
     public float curexp = 0;
-    public int PlayerLv =1;
+    public int PlayerLv =1; 
     public GameObject[] Weapons;
     public static Player player;
     public float rotateSensitivity;
     public float moveSpeed;
+    public bool skill1coolDown;
+    public bool skill2coolDown;
+    public bool skill3coolDown;
+    public bool skill4coolDown;
+    public bool skillRcoolDown;
+    public bool isCasting;
+    public Weapon Sword;
+    public Weapon Wand;
+    public Transform cameraArm;
+    public Transform characterBody;
+    public Camera followCamera;
 
-    
     bool canAttack = true;
     bool canDodge = true;
     bool isJump;
@@ -28,18 +39,11 @@ public class Player : MonoBehaviour
     bool skillRDown;
     bool skillRcast;
     bool skillRUp;
-
-    public bool skill1coolDown;
-    public bool skill2coolDown;
-    public bool skill3coolDown;
-    public bool skill4coolDown;
-    public bool skillRcoolDown;
-
-
+    bool TalkDown;
     bool iswallF;
     bool iswallR;
     bool iswallL;
-    bool isborder;
+    bool isTalk;
     bool sDown1;
     bool sDown2;
     bool jDown;
@@ -47,13 +51,13 @@ public class Player : MonoBehaviour
     bool DodgeDown;
     bool isDamage;
     bool isSwap;
-    public bool isCasting;
     int hasweaponindex = 0;
     float firedelay;
     float dodgedelay;
     float skillRcasting;
-    public Weapon Sword;
-    public Weapon Wand;
+
+    RaycastHit rayhit;
+    GameObject scanObject;
     Rigidbody rigid;
     Animator anim;
     MeshRenderer[] meshs;
@@ -61,9 +65,6 @@ public class Player : MonoBehaviour
     Vector3 lookright;
     Vector3 movedir;
 
-    public Transform cameraArm;
-    public Transform characterBody;
-    public Camera followCamera;
 
     public void Start()
     {
@@ -86,6 +87,7 @@ public class Player : MonoBehaviour
         Jump();
         Swap();
         Camera();
+        Talk();
     }
 
     void Getinput()
@@ -102,9 +104,8 @@ public class Player : MonoBehaviour
         skillRDown = Input.GetButtonDown("SkillR");
         skillRcast = Input.GetButton("SkillR");
         skillRUp = Input.GetButtonUp("SkillR");
-
+        TalkDown = Input.GetButtonDown("Talk");
     }
-
     void Camera()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -322,9 +323,6 @@ public class Player : MonoBehaviour
     {
         isCasting = false;
     }
-
-
-
     void Dodge()
     {
         dodgedelay += Time.deltaTime;
@@ -338,7 +336,6 @@ public class Player : MonoBehaviour
             Invoke("Dodgeout", 0.5f);
         }
     }
-
     IEnumerator OnDamage()
     {
         isDamage = true;
@@ -372,11 +369,31 @@ public class Player : MonoBehaviour
     void StopToWall()
     {
         iswallR = Physics.Raycast(characterBody.position, characterBody.forward, 1, LayerMask.GetMask("Wall"));
-        iswallL = Physics.Raycast(characterBody.position + characterBody.right * 2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
-        iswallF = Physics.Raycast(characterBody.position + characterBody.right * -2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
+       // iswallL = Physics.Raycast(characterBody.position + characterBody.right * 2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
+        //iswallF = Physics.Raycast(characterBody.position + characterBody.right * -2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
         Debug.DrawRay(characterBody.position, characterBody.forward  * 1 ,Color.green);
-        Debug.DrawRay(characterBody.position + characterBody.right* 2, characterBody.forward * 2 ,Color.green);
-        Debug.DrawRay(characterBody.position + characterBody.right*-2, characterBody.forward * 2 ,Color.green);
+        //Debug.DrawRay(characterBody.position + characterBody.right* 2, characterBody.forward * 2 ,Color.green);
+        //Debug.DrawRay(characterBody.position + characterBody.right*-2, characterBody.forward * 2 ,Color.green);
+    }
+    void Talk()
+    {
+        if(TalkDown && scanObject != null)
+        {
+            manager.Talk(scanObject);
+        }
+    }
+    void Scan()
+    {
+        Debug.DrawRay(cameraArm.position, cameraArm.forward * 8f, new Color(0, 1, 0));
+        isTalk = Physics.Raycast(cameraArm.position, cameraArm.forward,out rayhit, 8f, LayerMask.GetMask("Npc"));
+        if (rayhit.collider != null)
+        {
+            scanObject = rayhit.collider.gameObject;
+        }
+        else
+        {
+            scanObject = null;
+        }
     }
     void FrezzeRotaiton()
     {
@@ -387,6 +404,7 @@ public class Player : MonoBehaviour
     {
         FrezzeRotaiton();
         StopToWall();
+        Scan();
     }
 
 
