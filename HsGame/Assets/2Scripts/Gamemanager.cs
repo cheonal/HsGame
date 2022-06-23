@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    //public static GameManager manager;
+    public TalkManager talkManager;
+    public QuestManager questManager;
     public Player player;
     public RectTransform skillR;
     public RectTransform skillRGuageFront;
@@ -19,13 +20,15 @@ public class GameManager : MonoBehaviour
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
     public GameObject PlayerState;
-    public GameObject ScanObj;
+    public GameObject scanObject;
     public GameObject NpcTalk;
+    public Image NpcImage;
     public Text Lv;
     public Text TalkText;
+    public int talkIndex;
 
     public bool isTalk;
-    
+
     float skill1;
     float skill2;
     float skill3;
@@ -33,16 +36,19 @@ public class GameManager : MonoBehaviour
     float skill5;
     float Guage;
 
+    void Start()
+    {
+        Debug.Log(questManager.CheckQuest());
+    }
     void Update()
-    { 
+    {
         SkillCoolDown();
         SkillR();
         State();
         LvUp();
-       // Talk(GameObject scanObject);
     }
     void State()
-    { 
+    {
         PlayerHp.localScale = new Vector2((float)(Player.player.curhealth / Player.player.maxhealth), 1);
         PlayerMp.localScale = new Vector2((float)(Player.player.curmana / Player.player.maxmana), 1);
         PlayerExp.localScale = new Vector2((float)(Player.player.curexp / Player.player.maxexp), 1);
@@ -63,7 +69,7 @@ public class GameManager : MonoBehaviour
         {
             skill1CoolDown.anchoredPosition = Vector2.zero;
             skill1 += Time.deltaTime;
-            skill1CoolDown.localScale = new Vector2(1,(1 - skill1 / 5));
+            skill1CoolDown.localScale = new Vector2(1, (1 - skill1 / 5));
         }
         else
         {
@@ -75,7 +81,7 @@ public class GameManager : MonoBehaviour
         {
             skill2CoolDown.anchoredPosition = Vector2.zero;
             skill2 += Time.deltaTime;
-            skill2CoolDown.localScale = new Vector2(1,(1 - skill2 / 2));
+            skill2CoolDown.localScale = new Vector2(1, (1 - skill2 / 2));
         }
         else
         {
@@ -87,7 +93,7 @@ public class GameManager : MonoBehaviour
         {
             skill3CoolDown.anchoredPosition = Vector2.zero;
             skill3 += Time.deltaTime;
-            skill3CoolDown.localScale = new Vector2(1,(1 - skill3 / 3));
+            skill3CoolDown.localScale = new Vector2(1, (1 - skill3 / 3));
         }
         else
         {
@@ -99,7 +105,7 @@ public class GameManager : MonoBehaviour
         {
             skill4CoolDown.anchoredPosition = Vector2.zero;
             skill4 += Time.deltaTime;
-            skill4CoolDown.localScale = new Vector2(1,(1 - skill4 / 1));
+            skill4CoolDown.localScale = new Vector2(1, (1 - skill4 / 1));
         }
         else
         {
@@ -123,7 +129,7 @@ public class GameManager : MonoBehaviour
     void SkillR()
     {
 
-        if (player.isCasting == true && Guage<1f)
+        if (player.isCasting == true && Guage < 1f)
         {
             skillR.anchoredPosition = Vector3.up * 350;
             Guage += Time.deltaTime;
@@ -140,23 +146,38 @@ public class GameManager : MonoBehaviour
         }
         skillRGuageFront.localScale = new Vector3(Guage * 100 / 100, 1, 1);
     }
-    public void Talk(GameObject scanObject)
+    public void Action(GameObject scanObj)
     {
-        if (isTalk)
+        scanObject = scanObj;
+        ObjData objdata = scanObject.GetComponent<ObjData>();
+        Talk(objdata.id, objdata.isNpc);
+        NpcTalk.SetActive(isTalk);
+        PlayerState.SetActive(!isTalk);
+    }
+    void Talk(int id, bool isNpc)
+    {
+        //데이터 세팅
+        int questTalkIndex = questManager.GetQuestTalkIndex(id);
+        string talkData = talkManager.GetTalk(id+ questTalkIndex, talkIndex);
+
+        //대화가 끝날때
+        if (talkData == null)
         {
-            isTalk = false;
-            PlayerState.SetActive(false);
-            NpcTalk.SetActive(true);
+            isTalk = false;     
+            talkIndex = 0;
+            Debug.Log(questManager.CheckQuest(id)); 
+            return;
         }
+        if (isNpc)
+        {
+            TalkText.text = talkData;
+        }   
         else
         {
-            isTalk = true;
-            PlayerState.SetActive(true);
-            ScanObj = scanObject;
-            TalkText.text = ScanObj.name;   
+            TalkText.text = talkData;
         }
-        NpcTalk.SetActive(isTalk);
-
+        isTalk = true;
+        talkIndex++;
     }
 }
 

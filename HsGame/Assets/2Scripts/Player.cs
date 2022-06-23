@@ -43,7 +43,6 @@ public class Player : MonoBehaviour
     bool iswallF;
     bool iswallR;
     bool iswallL;
-    bool isTalk;
     bool sDown1;
     bool sDown2;
     bool jDown;
@@ -111,6 +110,10 @@ public class Player : MonoBehaviour
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngel = cameraArm.rotation.eulerAngles;
 
+        if (manager.isTalk)
+        {
+            mouseDelta = new Vector2(0, 0);
+        }
         if (Input.GetKeyDown("["))
         {
             rotateSensitivity -= 0.1f;
@@ -130,25 +133,29 @@ public class Player : MonoBehaviour
         lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
         lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
         movedir = lookforward * moveVec.y + lookright * moveVec.x;
-        if (isMove && canAttack && !isCasting)
-        {
-            characterBody.forward = movedir;
-        }
-
-        if (!canAttack || isSwap || isCasting)
+        if (!canAttack || isSwap || isCasting || manager.isTalk)
         {
             movedir = Vector3.zero;
+        }
+        if (manager.isTalk)
+        {
+            anim.SetBool("isRun", false);
+        }
+        if (isMove && canAttack && !isCasting && !manager.isTalk && !isSwap)
+        {
+            characterBody.forward = movedir;
         }
         if (!iswallF && !iswallL && !iswallR)
         {
             transform.position += movedir * moveSpeed * Time.deltaTime;
         }
+
       
         
     }
     void Jump()
     {
-        if (jDown && !isDodge && !isSwap && !isJump && canAttack && !isCasting)
+        if (jDown && !isDodge && !isSwap && !isJump && canAttack && !isCasting && !manager.isTalk)
         {
             rigid.AddForce(Vector3.up * 5, ForceMode.Impulse);
             isJump = true;
@@ -170,7 +177,7 @@ public class Player : MonoBehaviour
     }
     void Swap()
     {
-        if (sDown1 && !isSwap && canAttack && !isCasting) // 소드
+        if (sDown1 && !isSwap && canAttack && !isCasting && !manager.isTalk) // 소드
         {
             anim.SetTrigger("doSwap");
             if(hasweaponindex == 1) // 소드를 들고있을때
@@ -189,7 +196,7 @@ public class Player : MonoBehaviour
                 Invoke("Swapout", 0.5f);
             }
         }
-        if (sDown2 && !isSwap && canAttack && !isCasting) //완드
+        if (sDown2 && !isSwap && canAttack && !isCasting && !manager.isTalk) //완드
         {
             anim.SetTrigger("doSwap");
             if (hasweaponindex == 2) // 완드를 들고있을때
@@ -219,7 +226,7 @@ public class Player : MonoBehaviour
     {
         firedelay += Time.deltaTime;
         canAttack = 0.7 < firedelay;
-        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap)
+        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap && !manager.isTalk)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Sword.Swing();
@@ -227,7 +234,7 @@ public class Player : MonoBehaviour
             firedelay = 0;
         }
         else if ((skill1Down || skill2Down || skill3Down || skill4Down)
-            && canAttack && !isJump && hasweaponindex == 2 && !isSwap)
+            && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !manager.isTalk)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);    
             if (skill1Down && !skill1coolDown && curmana > 0)
@@ -267,13 +274,13 @@ public class Player : MonoBehaviour
                 firedelay = -0.2f;
             }
         }
-        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0)
+        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0 && !manager.isTalk)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Wand.MagicRstart();
             Wand.MagicRUp();
         }
-        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown && curmana > 0)
+        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown && curmana > 0 && !manager.isTalk)
         {
             isCasting = true;
             anim.SetTrigger("doShot");
@@ -379,13 +386,12 @@ public class Player : MonoBehaviour
     {
         if(TalkDown && scanObject != null)
         {
-            manager.Talk(scanObject);
+            manager.Action(scanObject);
         }
     }
     void Scan()
     {
-        Debug.DrawRay(cameraArm.position, cameraArm.forward * 8f, new Color(0, 1, 0));
-        isTalk = Physics.Raycast(cameraArm.position, cameraArm.forward,out rayhit, 8f, LayerMask.GetMask("Npc"));
+        Physics.Raycast(cameraArm.position, cameraArm.forward,out rayhit, 8f, LayerMask.GetMask("Npc"));
         if (rayhit.collider != null)
         {
             scanObject = rayhit.collider.gameObject;
