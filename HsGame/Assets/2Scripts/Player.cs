@@ -185,6 +185,8 @@ public class Player : MonoBehaviour
                 Weapons[0].SetActive(false);
                 hasweaponindex = 0;
                 isSwap = true;
+                manager.IconSword.color = new Color(1, 1, 1);
+                manager.IconHand.color = new Color(0, 0, 0);
                 Invoke("Swapout", 0.5f);
             }
             else //빈손,완드를 들고있을때
@@ -193,6 +195,9 @@ public class Player : MonoBehaviour
                 Weapons[0].SetActive(true);
                 hasweaponindex = 1;
                 isSwap = true;
+                manager.IconWand.color = new Color(1, 1, 1);
+                manager.IconSword.color = new Color(0, 0, 0);
+                manager.IconHand.color = new Color(1, 1, 1);
                 Invoke("Swapout", 0.5f);
             }
         }
@@ -204,15 +209,19 @@ public class Player : MonoBehaviour
                 Weapons[1].SetActive(false);
                 hasweaponindex = 0;
                 isSwap = true;
+                manager.IconWand.color = new Color(1, 1, 1);
+                manager.IconHand.color = new Color(0, 0, 0);
                 Invoke("Swapout", 0.5f);
             }
             else // 빈손,소드를 들고있을때
             {
-
                 Weapons[0].SetActive(false);
                 Weapons[1].SetActive(true);
                 hasweaponindex = 2;
                 isSwap = true;
+                manager.IconWand.color = new Color(0, 0, 0);
+                manager.IconSword.color = new Color(1, 1, 1);
+                manager.IconHand.color = new Color(1, 1, 1);
                 Invoke("Swapout", 0.5f);
             }
         }

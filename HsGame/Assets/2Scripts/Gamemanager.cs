@@ -19,6 +19,12 @@ public class GameManager : MonoBehaviour
     public RectTransform PlayerHp;
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
+    public GameObject PlayerWand;
+    public GameObject PlayerSword;
+    public GameObject PlayerHand;
+    public Image IconWand;
+    public Image IconSword;
+    public Image IconHand;
     public GameObject PlayerState;
     public GameObject scanObject;
     public GameObject NpcTalk;
