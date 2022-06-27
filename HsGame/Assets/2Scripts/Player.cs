@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public GameManager manager;
+    public PlayerStateUi State;
     public float maxhealth = 100;
     public float curhealth = 100;
     public float maxmana = 100;
@@ -39,6 +40,8 @@ public class Player : MonoBehaviour
     bool skillRDown;
     bool skillRcast;
     bool skillRUp;
+    bool StateDown;
+    bool isState;
     bool TalkDown;
     bool iswallF;
     bool iswallR;
@@ -87,6 +90,7 @@ public class Player : MonoBehaviour
         Swap();
         Camera();
         Talk();
+        StateOn();
     }
 
     void Getinput()
@@ -104,6 +108,7 @@ public class Player : MonoBehaviour
         skillRcast = Input.GetButton("SkillR");
         skillRUp = Input.GetButtonUp("SkillR");
         TalkDown = Input.GetButtonDown("Talk");
+        StateDown = Input.GetButtonDown("State");
     }
     void Camera()
     {
@@ -161,6 +166,22 @@ public class Player : MonoBehaviour
             isJump = true;
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
+        }
+    }
+    void StateOn()
+    {
+        if (StateDown)
+        {
+            if (!isState)
+            {
+                State.StateCall();
+                isState = true;
+            }
+            else
+            {
+                State.StateExit();
+                isState = false;
+            }
         }
     }
     void OnTriggerEnter(Collider other)
@@ -226,7 +247,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-
     void Swapout()
     {
         isSwap = false;
