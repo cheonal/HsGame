@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a82345ad479b343ada5c96d97fbe2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 80
+  Damage: 30
   MagicObj: {fileID: 1821700718268653463, guid: 8c931dd244a988a4999baf945882612c, type: 3}
   enumType: 1
 --- !u!135 &-4234637582860012650

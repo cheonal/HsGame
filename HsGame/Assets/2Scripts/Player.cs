@@ -268,7 +268,7 @@ public class Player : MonoBehaviour
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);    
             if (skill1Down && !skill1coolDown && curmana > 0)
             {
-                curmana -= 10;
+                curmana -= 20;
                 skill1coolDown = true;
                 anim.SetTrigger("doShot");
                 Wand.Magic1();
@@ -277,7 +277,7 @@ public class Player : MonoBehaviour
             }
             if (skill2Down && !skill2coolDown && curmana > 0)
             {
-                curmana -= 10;
+                curmana -= 5;
                 skill2coolDown = true;
                 anim.SetTrigger("doShot");
                 Wand.Magic2();
@@ -295,7 +295,7 @@ public class Player : MonoBehaviour
             }
             if (skill4Down && !skill4coolDown && curmana > 0)
             {
-                curmana -= 10;
+                curmana -= 5;
                 skill4coolDown = true;
                 anim.SetTrigger("doShot");
                 Wand.Magic4();
