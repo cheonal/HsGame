@@ -6,10 +6,55 @@ using UnityEngine.UI;
 public class PlayerStateUi : MonoBehaviour
 {
     public RectTransform StateUi;
+    public RectTransform DamageScale;
+    public RectTransform SpeedScale;
+    public RectTransform HpScale;
+    public RectTransform MpScale;
+    public Player player;
+    public Weapon weapon;
+    public MagicArea magic1;
+    public MagicArrow magic2;
+    public MagicArrow magic3;
+    public MagicArea magic4;
+    public MagicArrow magic5;
+    public Text LvPoint;
     public Text ManualMainText;
     public Text ManualText;
     public Text ManualManaText;
     public Text ManualDamageText;
+    public Text DamagePonint;
+    public Text SpeedPonint;
+    public Text HpPonint;
+    public Text MpPonint;
+    public float DamageUp = 0;
+    public float SpeedUp = 0;
+    public float HpUp = 0;
+    public float MpUp = 0;
+
+    void Update()
+    {
+        PointText();
+        StateScale();
+        ExtraLvPoint();
+    }
+    void StateScale()
+    {
+        DamageScale.localScale = new Vector2 (DamageUp/10,1);
+        SpeedScale.localScale = new Vector2(SpeedUp / 10, 1);
+        HpScale.localScale = new Vector2(HpUp / 10, 1);
+        MpScale.localScale = new Vector2(MpUp / 10, 1);
+    }
+    void ExtraLvPoint()
+    {
+        LvPoint.text = "남은 포인트:" + player.LvPoint;
+    }
+    void PointText()
+    {
+        DamagePonint.text = "" + DamageUp + "/10";
+        SpeedPonint.text = "" + SpeedUp + "/10";
+        HpPonint.text = "" + HpUp + "/10";
+        MpPonint.text = "" + MpUp + "/10";
+    }
     public void StateCall()
     {
         StateUi.anchoredPosition = Vector2.zero;
@@ -81,4 +126,72 @@ public class PlayerStateUi : MonoBehaviour
         ManualManaText.text = "재사용 대기시간:1분";
         ManualDamageText.text = "";
     }
+    public void Item5()
+    {
+        ManualMainText.text = "맨손";
+        ManualText.text = "아무것도 장비하지 않은 기본상태";
+        ManualManaText.text = "무기를 들고 사람들이랑 대화하면"+"\n" + "받아주지 않을꺼야";
+        ManualDamageText.text = "";
+    }
+    public void Item6()
+    {
+        ManualMainText.text = "한손검";
+        ManualText.text = "슬라임에게서 받은 평범한 한손검";
+        ManualManaText.text = "보기보다는 강력한 근접무기야";
+        ManualDamageText.text = "100+레벨당 데미지";
+    }
+    public void Item7()
+    {
+        ManualMainText.text = "매직 완드";
+        ManualText.text = "퀘스트를 완료하고 얻은 완드";
+        ManualManaText.text = "스킬을 사용하기위해서는" +"\n" + "필수로 장비해야돼";
+        ManualDamageText.text = "";
+    }
+
+
+    public void Point1Up()
+    {
+        if (player.LvPoint > 0)
+        {
+            player.LvPoint -= 1;
+            DamageUp += 1;
+            weapon.Damage *= (float)1.3;
+            magic1.Damage *= (float)1.2;
+            magic2.Damage *= (float)1.2;
+            magic3.Damage *= (float)1.2;
+            magic4.Damage *= (float)1.2;
+            magic5.Damage *= (float)1.2;
+        }
+    }
+    public void Point2Up()
+    {
+        if (player.LvPoint > 0)
+        {
+            player.LvPoint -= 1;
+            SpeedUp += 1;
+            player.moveSpeed +=2;
+            player.firedelay /= (float)0.1;
+        }
+    }
+    public void Point3Up()
+    {
+        if (player.LvPoint > 0)
+        {
+            player.LvPoint -= 1;
+            HpUp += 1;
+            player.curhealth *= (float)1.2;
+            player.maxhealth *= (float)1.2;
+        }
+    }
+    public void Point4Up()
+    {
+        if (player.LvPoint > 0)
+        {
+            player.LvPoint -= 1;
+            MpUp += 1;
+            player.curmana *= (float)1.2;
+            player.maxmana *= (float)1.2;
+        }
+    }
+
 }

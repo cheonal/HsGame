@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MagicArrow : MonoBehaviour
 {
-    public int Damage;
+    public float Damage;
     public GameObject Explode;
     public GameObject MagicObj;
     Rigidbody rigid;
@@ -13,6 +13,7 @@ public class MagicArrow : MonoBehaviour
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
+
     }
     void Start()
     {
@@ -30,10 +31,10 @@ public class MagicArrow : MonoBehaviour
                 rigid.velocity = transform.forward * 100;
                 break;
         }
-     
     }
     void Update()
     {
+
         MagicObj.transform.position = gameObject.transform.position;
     }
     void OnTriggerEnter(Collider other)

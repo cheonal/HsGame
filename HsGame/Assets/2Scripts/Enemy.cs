@@ -5,8 +5,8 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth;
-    public int curHealth;
+    public float maxHealth;
+    public float curHealth;
     public Transform Target;
     public BoxCollider meleeArea;
     public bool isChase;

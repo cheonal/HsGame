@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
 {
     public BoxCollider meleeArea;
     public TrailRenderer traileffect;
-    public int Damage;
+    public float Damage;
     public Transform magic1Pos;
     public Transform magic2Pos;
     public Transform magic4Pos;

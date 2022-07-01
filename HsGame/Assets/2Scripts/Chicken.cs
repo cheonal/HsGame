@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Chicken : MonoBehaviour
 {
-    public int maxHealth;
-    public int curHealth;
+    public float maxHealth;
+    public float curHealth;
     public Image hpbar;
     public enum Type { A, B };
     public Type enumType;

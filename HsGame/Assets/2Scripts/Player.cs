@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public float curmana = 100;
     public float maxexp = 100;
     public float curexp = 0;
+    public int LvPoint;
     public int PlayerLv =1; 
     public GameObject[] Weapons;
     public static Player player;
@@ -54,7 +55,7 @@ public class Player : MonoBehaviour
     bool isDamage;
     bool isSwap;
     int hasweaponindex = 0;
-    float firedelay;
+    public float firedelay;
     float dodgedelay;
     float skillRcasting;
 

@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
             player.PlayerLv += 1;
             player.curexp -= player.maxexp;
             player.maxexp += 10;
+            player.LvPoint += 1;
         }
     }
     void SkillCoolDown()

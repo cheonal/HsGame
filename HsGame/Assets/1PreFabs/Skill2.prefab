@@ -48,6 +48,7 @@ MonoBehaviour:
   Damage: 50
   Explode: {fileID: 1025151538915994860, guid: e97b5dcc9efc0fe48a8f3d7edfaab784, type: 3}
   MagicObj: {fileID: 5333589572731631869, guid: d29baeb0e44cad64c8fcefe8209b4051, type: 3}
+  enumType: 0
 --- !u!135 &7432730581032354129
 SphereCollider:
   m_ObjectHideFlags: 0

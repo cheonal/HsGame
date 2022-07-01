@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class MagicArea : MonoBehaviour
 {
-    public int Damage;
+    public float Damage;
     public GameObject MagicObj;
     SphereCollider Area;
     public enum Type { skill1, skill4 };
     public Type enumType;
+
     void Awake()
     {
         Area = GetComponent<SphereCollider>();
