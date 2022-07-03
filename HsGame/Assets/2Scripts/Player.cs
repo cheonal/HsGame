@@ -6,10 +6,10 @@ public class Player : MonoBehaviour
 {
     public GameManager manager;
     public PlayerStateUi State;
-    public float maxhealth = 100;
-    public float curhealth = 100;
-    public float maxmana = 100;
-    public float curmana = 100;
+    public float maxhealth;
+    public float curhealth;
+    public float maxmana;
+    public float curmana;
     public float maxexp = 100;
     public float curexp = 0;
     public int LvPoint;
@@ -54,11 +54,14 @@ public class Player : MonoBehaviour
     bool DodgeDown;
     bool isDamage;
     bool isSwap;
+    bool Item1;
+    bool Item2;
+    bool Item3;
+    bool Item4;
     int hasweaponindex = 0;
     public float firedelay;
     float dodgedelay;
     float skillRcasting;
-
     RaycastHit rayhit;
     GameObject scanObject;
     Rigidbody rigid;
@@ -67,8 +70,6 @@ public class Player : MonoBehaviour
     Vector3 lookforward;
     Vector3 lookright;
     Vector3 movedir;
-
-
     public void Start()
     {
         player = this.GetComponent<Player>();
@@ -92,6 +93,7 @@ public class Player : MonoBehaviour
         Camera();
         Talk();
         StateOn();
+        UseItem();
     }
 
     void Getinput()
@@ -110,6 +112,11 @@ public class Player : MonoBehaviour
         skillRUp = Input.GetButtonUp("SkillR");
         TalkDown = Input.GetButtonDown("Talk");
         StateDown = Input.GetButtonDown("State");
+        Item1 = Input.GetButtonDown("Item1");
+        Item2 = Input.GetButtonDown("Item2");
+        Item3 = Input.GetButtonDown("Item3");
+        Item4 = Input.GetButtonDown("Item4");
+
     }
     void Camera()
     {
@@ -167,6 +174,25 @@ public class Player : MonoBehaviour
             isJump = true;
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
+        }
+    }
+    void UseItem()
+    {
+        if (Item1)
+        {
+            State.Item1Use();
+        }
+        if (Item2)
+        {
+            State.Item2Use();
+        }
+        if (Item3)
+        {
+            State.Item3Use();
+        }
+        if (Item4)
+        {
+            State.Item4Use();
         }
     }
     void StateOn()

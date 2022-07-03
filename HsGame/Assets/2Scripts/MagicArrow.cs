@@ -36,6 +36,20 @@ public class MagicArrow : MonoBehaviour
     {
 
         MagicObj.transform.position = gameObject.transform.position;
+        switch (enumType)
+        {
+            
+            case Type.skill2:
+                Damage = 50 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                break;
+
+            case Type.skill3:
+                Damage = 30 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                break;
+            case Type.skill5:
+                Damage = 200 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                break;
+        }
     }
     void OnTriggerEnter(Collider other)
     {

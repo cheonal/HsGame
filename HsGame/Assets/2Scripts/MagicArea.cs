@@ -27,6 +27,20 @@ public class MagicArea : MonoBehaviour
         }
 
     }
+    void Update()
+    {
+        MagicObj.transform.position = transform.position;
+        switch (enumType)
+        {
+            case Type.skill1:
+                Damage = 30 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                break;
+
+            case Type.skill4:
+                Damage = 30 + (30 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                break;
+        }
+    }
 
 
     void Start()
@@ -64,10 +78,7 @@ public class MagicArea : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Area.enabled = false;
     }
-    void Update()
-    {
-        MagicObj.transform.position = transform.position;
-    }
+
 
     void Magic1End()
     {

@@ -12,6 +12,7 @@ public class PlayerStateUi : MonoBehaviour
     public RectTransform MpScale;
     public Player player;
     public Weapon weapon;
+    public static PlayerStateUi PlayerUI;
     public MagicArea magic1;
     public MagicArrow magic2;
     public MagicArrow magic3;
@@ -26,16 +27,47 @@ public class PlayerStateUi : MonoBehaviour
     public Text SpeedPonint;
     public Text HpPonint;
     public Text MpPonint;
-    public float DamageUp = 0;
-    public float SpeedUp = 0;
-    public float HpUp = 0;
-    public float MpUp = 0;
+    public Text Helath;
+    public Text Mana;
+    public Text Exp;
+    public Text Posion1Count;
+    public Text Posion2Count;
+    public Text Posion3Count;
+    public float hPosion1Count;
+    public float hPosion2Count;
+    public float hPosion3Count;
+    public float DamageUp;
+    public float SpeedUp;
+    public float HpUp;
+    public float MpUp;
+    bool Item1CoodDown;
+    bool Item2CoodDown;
+    bool Item3CoodDown;
+
+    public void Start()
+    {
+        PlayerUI = this.GetComponent<PlayerStateUi>();
+    }
 
     void Update()
     {
         PointText();
         StateScale();
         ExtraLvPoint();
+        StateText();
+        ItemText();
+    }
+    void ItemText()
+    {
+        Posion1Count.text = "" + hPosion1Count;
+        Posion2Count.text = "" + hPosion2Count;
+        Posion3Count.text = "" + hPosion3Count;
+    }
+    void StateText()
+    {
+        Helath.text = player.curhealth + "/" + player.maxhealth;
+        Mana.text = player.curmana + "/" + player.maxmana;
+        Exp.text = player.curexp + "/" + player.maxexp;
     }
     void StateScale()
     {
@@ -115,7 +147,7 @@ public class PlayerStateUi : MonoBehaviour
     public void Item3()
     {
         ManualMainText.text = "엘릭서";
-        ManualText.text = "마시면 일정시간동안"+"\n"+ "공격력과 이동속도가 상승한다";
+        ManualText.text = "마시면 일정시간동안"+"\n"+ "근접 공격력과 이동속도가 상승한다";
         ManualManaText.text = "공격력 20%" + "이동속도 30%"+"\n" + "재사용 대기시간:1분";
         ManualDamageText.text = "";
     }
@@ -155,12 +187,8 @@ public class PlayerStateUi : MonoBehaviour
         {
             player.LvPoint -= 1;
             DamageUp += 1;
-            weapon.Damage *= (float)1.3;
-            magic1.Damage *= (float)1.2;
-            magic2.Damage *= (float)1.2;
-            magic3.Damage *= (float)1.2;
-            magic4.Damage *= (float)1.2;
-            magic5.Damage *= (float)1.2;
+            weapon.Damage = 100 + (100 * (DamageUp * (float)0.1));
+            //magic 관련 함수는 인스턴스 되는 오브젝트이기 때문에 담당하는 스크립트에서 직접 데미지 지정
         }
     }
     public void Point2Up()
@@ -169,8 +197,7 @@ public class PlayerStateUi : MonoBehaviour
         {
             player.LvPoint -= 1;
             SpeedUp += 1;
-            player.moveSpeed +=2;
-            player.firedelay /= (float)0.1;
+            player.moveSpeed = 15 + (15*(SpeedUp *(float)0.1));
         }
     }
     public void Point3Up()
@@ -179,8 +206,8 @@ public class PlayerStateUi : MonoBehaviour
         {
             player.LvPoint -= 1;
             HpUp += 1;
-            player.curhealth *= (float)1.2;
-            player.maxhealth *= (float)1.2;
+            player.curhealth = 100 + (100 * (HpUp * (float)0.1));
+            player.maxhealth = 100 + (100 * (HpUp * (float)0.1));
         }
     }
     public void Point4Up()
@@ -189,9 +216,72 @@ public class PlayerStateUi : MonoBehaviour
         {
             player.LvPoint -= 1;
             MpUp += 1;
-            player.curmana *= (float)1.2;
-            player.maxmana *= (float)1.2;
+            player.curmana = 100 + (100 * (MpUp * (float)0.1));
+            player.maxmana = 100 + (100 * (MpUp * (float)0.1));
         }
     }
+    public void Item1Use()
+    {  
+        if (hPosion1Count > 0 && !Item1CoodDown)
+        {
+            hPosion1Count -= 1;
+            player.curhealth += player.maxhealth * (float)0.5; 
+            if(player.curhealth> player.maxhealth)
+            {
+                player.curhealth = player.maxhealth;
+                Item1CoodDown = true;
+                Invoke("Item1UseOut", 5f);
+            }
 
+        }
+    }
+    void Item1UseOut()
+    {
+        Item1CoodDown=false;
+    }
+    public void Item2Use()
+    {
+        if (hPosion2Count > 0 && !Item2CoodDown)
+        {
+            hPosion2Count -= 1;
+            player.curmana += player.maxmana * (float)0.3;
+            if (player.curmana > player.maxmana)
+            {
+                player.curmana = player.maxmana;
+                Item2CoodDown = true;
+                Invoke("Item2UseOut", 5f);
+            }
+
+        }
+    }
+    void Item2UseOut()
+    {
+        Item2CoodDown = false;
+    }
+    public void Item3Use()
+    {
+        if (hPosion3Count > 0 && !Item3CoodDown)
+        {
+            hPosion3Count -= 1;
+            weapon.Damage += weapon.Damage * (float)0.2;
+            player.moveSpeed += player.moveSpeed * (float)0.3;
+            Item3CoodDown = true;
+            Invoke("Item3UpOut", 10f);
+            Invoke("Item3UseOut", 30f);
+        }
+
+    }
+    void Item3UseOut()
+    {
+        Item3CoodDown = false;
+    }
+    void Item3UpOut()
+    {
+        weapon.Damage *= ((float)5/6);
+        player.moveSpeed *= ((float)10/13);
+    }
+    public void Item4Use()
+    {
+
+    }
 }

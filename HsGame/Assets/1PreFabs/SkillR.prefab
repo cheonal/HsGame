@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4e6b5b502ab0f14a801e8c92a372b82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 200
+  Damage: 0
   Explode: {fileID: 5487257932551819662, guid: 253243b987ea5ea47a301102a760bfb4, type: 3}
   MagicObj: {fileID: 8273962449627706614, guid: 36723c09b7e4f2e40a6a31f444036898, type: 3}
   enumType: 2
