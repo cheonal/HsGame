@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public TalkManager talkManager;
     public QuestManager questManager;
+    public PlayerStateUi PlayerStateUi;
     public Player player;
     public RectTransform skillR;
     public RectTransform skillRGuageFront;
@@ -16,6 +17,10 @@ public class GameManager : MonoBehaviour
     public RectTransform skill3CoolDown;
     public RectTransform skill4CoolDown;
     public RectTransform skill5CoolDown;
+    public RectTransform Item1CoolDown;
+    public RectTransform Item2CoolDown;
+    public RectTransform Item3CoolDown;
+    public RectTransform Item4CoolDown;
     public RectTransform PlayerHp;
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
@@ -35,6 +40,10 @@ public class GameManager : MonoBehaviour
 
     public bool isTalk;
 
+    float Item1;
+    float Item2;
+    float Item3;
+    float Item4;
     float skill1;
     float skill2;
     float skill3;
@@ -48,7 +57,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        SkillCoolDown();
+        CoolDown();
         SkillR();
         State();
         LvUp();
@@ -70,7 +79,7 @@ public class GameManager : MonoBehaviour
             player.LvPoint += 1;
         }
     }
-    void SkillCoolDown()
+    void CoolDown()
     {
         if (player.skill1coolDown) // skill1
         {
@@ -131,6 +140,54 @@ public class GameManager : MonoBehaviour
             skill5 = 0;
             skill5CoolDown.anchoredPosition = Vector2.down * 300;
             skill5CoolDown.localScale = new Vector2(1, 1);
+        }
+        if (PlayerStateUi.Item1CoodDown)
+        {
+            Item1CoolDown.anchoredPosition = Vector2.zero;
+            Item1 += Time.deltaTime;
+            Item1CoolDown.localScale = new Vector2(1, (1 - Item1 / 5));
+        }
+        else
+        {
+            Item1 = 0;
+            Item1CoolDown.anchoredPosition = Vector2.down * 300;
+            Item1CoolDown.localScale = new Vector2(1, 1);
+        }
+        if (PlayerStateUi.Item2CoodDown)
+        {
+            Item2CoolDown.anchoredPosition = Vector2.zero;
+            Item2 += Time.deltaTime;
+            Item2CoolDown.localScale = new Vector2(1, (1 - Item2 / 5));
+        }
+        else
+        {
+            Item2 = 0;
+            Item2CoolDown.anchoredPosition = Vector2.down * 300;
+            Item2CoolDown.localScale = new Vector2(1, 1);
+        }
+        if (PlayerStateUi.Item3CoodDown)
+        {
+            Item3CoolDown.anchoredPosition = Vector2.zero;
+            Item3 += Time.deltaTime;
+            Item3CoolDown.localScale = new Vector2(1, (1 - Item3 / 30));
+        }
+        else
+        {
+            Item3 = 0;
+            Item3CoolDown.anchoredPosition = Vector2.down * 300;
+            Item3CoolDown.localScale = new Vector2(1, 1);
+        }
+        if (PlayerStateUi.Item4CoodDown)
+        {
+            Item4CoolDown.anchoredPosition = Vector2.zero;
+            Item4 += Time.deltaTime;
+            Item4CoolDown.localScale = new Vector2(1, (1 - Item4 / 60));
+        }
+        else
+        {
+            Item4 = 0;
+            Item4CoolDown.anchoredPosition = Vector2.down * 300;
+            Item4CoolDown.localScale = new Vector2(1, 1);
         }
     }
     void SkillR()

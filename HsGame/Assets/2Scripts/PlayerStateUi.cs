@@ -33,16 +33,18 @@ public class PlayerStateUi : MonoBehaviour
     public Text Posion1Count;
     public Text Posion2Count;
     public Text Posion3Count;
-    public float hPosion1Count;
-    public float hPosion2Count;
-    public float hPosion3Count;
+    public float Item1Count;
+    public float Item2Count;
+    public float Item3Count;
+   // public float Item4Count;
     public float DamageUp;
     public float SpeedUp;
     public float HpUp;
     public float MpUp;
-    bool Item1CoodDown;
-    bool Item2CoodDown;
-    bool Item3CoodDown;
+    public bool Item1CoodDown;
+    public bool Item2CoodDown;
+    public bool Item3CoodDown;
+    public bool Item4CoodDown;
 
     public void Start()
     {
@@ -59,9 +61,9 @@ public class PlayerStateUi : MonoBehaviour
     }
     void ItemText()
     {
-        Posion1Count.text = "" + hPosion1Count;
-        Posion2Count.text = "" + hPosion2Count;
-        Posion3Count.text = "" + hPosion3Count;
+        Posion1Count.text = "" + Item1Count;
+        Posion2Count.text = "" + Item2Count;
+        Posion3Count.text = "" + Item3Count;
     }
     void StateText()
     {
@@ -147,8 +149,8 @@ public class PlayerStateUi : MonoBehaviour
     public void Item3()
     {
         ManualMainText.text = "엘릭서";
-        ManualText.text = "마시면 일정시간동안"+"\n"+ "근접 공격력과 이동속도가 상승한다";
-        ManualManaText.text = "공격력 20%" + "이동속도 30%"+"\n" + "재사용 대기시간:1분";
+        ManualText.text = "마시면 10초동안"+"\n"+ "근접 공격력과 이동속도가 상승한다";
+        ManualManaText.text = "공격력 20%" + "이동속도 30%"+"\n" + "재사용 대기시간:30초";
         ManualDamageText.text = "";
     }
     public void Item4()
@@ -222,9 +224,9 @@ public class PlayerStateUi : MonoBehaviour
     }
     public void Item1Use()
     {  
-        if (hPosion1Count > 0 && !Item1CoodDown)
+        if (Item1Count > 0 && !Item1CoodDown)
         {
-            hPosion1Count -= 1;
+            Item1Count -= 1;
             player.curhealth += player.maxhealth * (float)0.5; 
             if(player.curhealth> player.maxhealth)
             {
@@ -241,9 +243,9 @@ public class PlayerStateUi : MonoBehaviour
     }
     public void Item2Use()
     {
-        if (hPosion2Count > 0 && !Item2CoodDown)
+        if (Item2Count > 0 && !Item2CoodDown)
         {
-            hPosion2Count -= 1;
+            Item2Count -= 1;
             player.curmana += player.maxmana * (float)0.3;
             if (player.curmana > player.maxmana)
             {
@@ -260,9 +262,9 @@ public class PlayerStateUi : MonoBehaviour
     }
     public void Item3Use()
     {
-        if (hPosion3Count > 0 && !Item3CoodDown)
+        if (Item3Count > 0 && !Item3CoodDown)
         {
-            hPosion3Count -= 1;
+            Item3Count -= 1;
             weapon.Damage += weapon.Damage * (float)0.2;
             player.moveSpeed += player.moveSpeed * (float)0.3;
             Item3CoodDown = true;
@@ -282,6 +284,15 @@ public class PlayerStateUi : MonoBehaviour
     }
     public void Item4Use()
     {
+        if (!Item4CoodDown)
+        {
+            Item4CoodDown = true;
+            Invoke("Item4UseOut", 60f);
+        }
 
+    }
+    void Item4UseOut()
+    {
+        Item4CoodDown = false;
     }
 }
