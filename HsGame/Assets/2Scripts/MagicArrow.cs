@@ -7,13 +7,14 @@ public class MagicArrow : MonoBehaviour
     public float Damage;
     public GameObject Explode;
     public GameObject MagicObj;
+    public static MagicArrow magicArrow;
     Rigidbody rigid;
     public enum Type {skill2,skill3,skill5};
     public Type enumType;
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-
+        magicArrow = this.GetComponent<MagicArrow>();
     }
     void Start()
     {
@@ -34,20 +35,18 @@ public class MagicArrow : MonoBehaviour
     }
     void Update()
     {
-
         MagicObj.transform.position = gameObject.transform.position;
         switch (enumType)
         {
-            
             case Type.skill2:
                 Damage = 50 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
 
             case Type.skill3:
-                Damage = 30 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 30 + (30 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
             case Type.skill5:
-                Damage = 200 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 200 + (200 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
         }
     }

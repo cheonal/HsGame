@@ -7,22 +7,26 @@ public class MagicArea : MonoBehaviour
     public float Damage;
     public GameObject MagicObj;
     SphereCollider Area;
+    public static MagicArea magicArea;
     public enum Type { skill1, skill4 };
     public Type enumType;
 
     void Awake()
     {
+        magicArea = this.GetComponent<MagicArea>();
         Area = GetComponent<SphereCollider>();
         switch (enumType)
         {
             case Type.skill1:
                 StartCoroutine("Magic1Start");
+                Damage = 30 + (30 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 Invoke("Magic1End", 5f);
                 break;
 
             case Type.skill4:
                 StartCoroutine("Magic4Start");
                 Invoke("Magic4End", 1f);
+                Damage = 30 + (30 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
         }
 

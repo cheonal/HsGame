@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     public RectTransform PlayerHp;
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
+    public GameObject ElixirMini;
+    public RectTransform ElixirMiniGuage;
     public GameObject PlayerWand;
     public GameObject PlayerSword;
     public GameObject PlayerHand;
@@ -40,6 +42,7 @@ public class GameManager : MonoBehaviour
 
     public bool isTalk;
 
+    float ElixirMiniTime;
     float Item1;
     float Item2;
     float Item3;
@@ -176,6 +179,18 @@ public class GameManager : MonoBehaviour
             Item3 = 0;
             Item3CoolDown.anchoredPosition = Vector2.down * 300;
             Item3CoolDown.localScale = new Vector2(1, 1);
+        }
+        if (PlayerStateUi.Item3PowerUp)
+        {
+            ElixirMiniGuage.anchoredPosition = Vector2.zero;
+            ElixirMini.SetActive(true);
+            ElixirMiniTime += Time.deltaTime;
+            ElixirMiniGuage.localScale = new Vector2(1 - ElixirMiniTime / 10, 1);
+        }
+        else
+        {
+            ElixirMiniGuage.anchoredPosition = Vector2.down * 300;
+            ElixirMini.SetActive(false);
         }
         if (PlayerStateUi.Item4CoodDown)
         {

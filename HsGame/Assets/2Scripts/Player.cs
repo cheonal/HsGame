@@ -29,7 +29,8 @@ public class Player : MonoBehaviour
     public Transform cameraArm;
     public Transform characterBody;
     public Camera followCamera;
-
+    public GameObject item3On;
+    bool isDead;
     bool canAttack = true;
     bool canDodge = true;
     bool isJump;
@@ -146,7 +147,7 @@ public class Player : MonoBehaviour
         lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
         lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
         movedir = lookforward * moveVec.y + lookright * moveVec.x;
-        if (!canAttack || isSwap || isCasting || manager.isTalk)
+        if (!canAttack || isSwap || isCasting || manager.isTalk || isDead)
         {
             movedir = Vector3.zero;
         }
@@ -154,7 +155,7 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isRun", false);
         }
-        if (isMove && canAttack && !isCasting && !manager.isTalk && !isSwap)
+        if (isMove && canAttack && !isCasting && !manager.isTalk && !isSwap || isDead)
         {
             characterBody.forward = movedir;
         }
@@ -215,13 +216,33 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "Enemy Bullet")
         {
-            if (!isDamage)
+            if (!isDamage && !isDead)
             {
                 Bullet enemyBullet = other.GetComponent<Bullet>();
                 curhealth -= enemyBullet.damage;
                 StartCoroutine(OnDamage());
             }
         }
+    }
+    IEnumerator OnDamage()
+    {
+        if (curhealth <= 0)
+        {
+            anim.SetTrigger("doDie");
+            isDead = true;
+        }
+        isDamage = true;
+        foreach (MeshRenderer mesh in meshs)
+        {
+            mesh.material.color = Color.gray;
+        }
+        yield return new WaitForSeconds(1f);
+        isDamage = false;
+        foreach (MeshRenderer mesh in meshs)
+        {
+            mesh.material.color = Color.white;
+        }
+
     }
     void Swap()
     {
@@ -399,22 +420,7 @@ public class Player : MonoBehaviour
             Invoke("Dodgeout", 0.5f);
         }
     }
-    IEnumerator OnDamage()
-    {
-        isDamage = true;
-        foreach (MeshRenderer mesh in meshs)
-        {
-            mesh.material.color = Color.gray;
-        }
-        yield return new WaitForSeconds(1f);
 
-        isDamage = false;
-        foreach (MeshRenderer mesh in meshs)
-        {
-            mesh.material.color = Color.white;
-        }
-
-    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")

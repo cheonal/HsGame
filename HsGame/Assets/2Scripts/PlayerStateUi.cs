@@ -41,6 +41,7 @@ public class PlayerStateUi : MonoBehaviour
     public float SpeedUp;
     public float HpUp;
     public float MpUp;
+    public bool Item3PowerUp;
     public bool Item1CoodDown;
     public bool Item2CoodDown;
     public bool Item3CoodDown;
@@ -102,35 +103,35 @@ public class PlayerStateUi : MonoBehaviour
         ManualMainText.text = "스노우 크리스탈";
         ManualText.text = "주변 몬스터에게 피해를 준다!" + "\n"+ "눈보라 주변 적에게 지속 피해" + "\n" + "여기로 유인해";
         ManualManaText.text = "정신력 소모:20";
-        ManualDamageText.text = "20+" + "레벨당 데미지";
+        ManualDamageText.text = "30x(0.1공격력)";
     }
     public void ManualSkill2()
     {
         ManualMainText.text = "파이어 볼";
         ManualText.text = "화염을 발사하는 마법!" + "\n" + "처음 적중한 적한테서 폭발하는 스킬";
         ManualManaText.text = "정신력 소모:5";
-        ManualDamageText.text = "50+" + "레벨당 데미지";
+        ManualDamageText.text = "50x(0.1공격력)";
     }
     public void ManualSkill3()
     {
         ManualMainText.text = "에너지 볼트";
         ManualText.text = "에너지를 발사하는 마법!" + "\n" + "적을 관통해서 날아가는 스킬";
         ManualManaText.text = "정신력 소모:10";
-        ManualDamageText.text = "30+" + "레벨당 데미지";
+        ManualDamageText.text = "30x(0.1공격력)";
     }
     public void ManualSkill4()
     {
         ManualMainText.text = "썬더 에리어";
         ManualText.text = "주변에 번개를 일으키는 마법!" + "\n" + "주변에 피해를 주고 날려버리는 스킬";
         ManualManaText.text = "정신력 소모:5";
-        ManualDamageText.text = "30+" + "레벨당 데미지";
+        ManualDamageText.text = "30x(0.1공격력)";
     }
     public void ManualSkill5()
     {
         ManualMainText.text = "엘리멘탈 에로우";
         ManualText.text = "충전이 완료되면 강력한 화살 발사!" + "\n" + "2초이상 차징해서 발사하는 스킬 " + "\n" + "5초가 지나면 자동으로 발사";
         ManualManaText.text = "정신력 소모:20";
-        ManualDamageText.text = "200+" + "레벨당 데미지";
+        ManualDamageText.text = "200x(0.1공격력)"; ;
     }
     public void Item1()
     {
@@ -172,7 +173,7 @@ public class PlayerStateUi : MonoBehaviour
         ManualMainText.text = "한손검";
         ManualText.text = "슬라임에게서 받은 평범한 한손검";
         ManualManaText.text = "보기보다는 강력한 근접무기야";
-        ManualDamageText.text = "100+레벨당 데미지";
+        ManualDamageText.text = "100x(0.1공격력)x(0.2엘릭서)";
     }
     public void Item7()
     {
@@ -227,12 +228,12 @@ public class PlayerStateUi : MonoBehaviour
         if (Item1Count > 0 && !Item1CoodDown)
         {
             Item1Count -= 1;
-            player.curhealth += player.maxhealth * (float)0.5; 
-            if(player.curhealth> player.maxhealth)
+            player.curhealth += player.maxhealth * (float)0.5;
+            Item1CoodDown = true;
+            Invoke("Item1UseOut", 5f);
+            if (player.curhealth> player.maxhealth)
             {
                 player.curhealth = player.maxhealth;
-                Item1CoodDown = true;
-                Invoke("Item1UseOut", 5f);
             }
 
         }
@@ -247,11 +248,11 @@ public class PlayerStateUi : MonoBehaviour
         {
             Item2Count -= 1;
             player.curmana += player.maxmana * (float)0.3;
+            Item2CoodDown = true;
+            Invoke("Item2UseOut", 5f);
             if (player.curmana > player.maxmana)
             {
                 player.curmana = player.maxmana;
-                Item2CoodDown = true;
-                Invoke("Item2UseOut", 5f);
             }
 
         }
@@ -267,7 +268,9 @@ public class PlayerStateUi : MonoBehaviour
             Item3Count -= 1;
             weapon.Damage += weapon.Damage * (float)0.2;
             player.moveSpeed += player.moveSpeed * (float)0.3;
+            player.item3On.SetActive(true);
             Item3CoodDown = true;
+            Item3PowerUp = true;
             Invoke("Item3UpOut", 10f);
             Invoke("Item3UseOut", 30f);
         }
@@ -275,10 +278,12 @@ public class PlayerStateUi : MonoBehaviour
     }
     void Item3UseOut()
     {
+        player.item3On.SetActive(false);
         Item3CoodDown = false;
     }
     void Item3UpOut()
     {
+        Item3PowerUp = false;
         weapon.Damage *= ((float)5/6);
         player.moveSpeed *= ((float)10/13);
     }
