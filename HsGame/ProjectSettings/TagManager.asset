@@ -12,6 +12,8 @@ TagManager:
   - MagicArrow
   - MagicArea
   - MagicStart
+  - Portal
+  - box
   layers:
   - Default
   - TransparentFX
@@ -30,7 +32,7 @@ TagManager:
   - hpback
   - Magic
   - Npc
-  - 
+  - Portal
   - 
   - 
   - 

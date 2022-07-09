@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
-
+    public Text QuestText;
     public bool isTalk;
 
     float ElixirMiniTime;
@@ -60,10 +60,15 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+        Quest();
         CoolDown();
         SkillR();
         State();
         LvUp();
+    }
+    void Quest()
+    {
+        QuestText.text = "" + QuestManager.questManager.CheckQuest();
     }
     void State()
     {

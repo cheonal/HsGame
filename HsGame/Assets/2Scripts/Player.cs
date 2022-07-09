@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public GameManager manager;
+    public EnemySpawn enemySpawn;
     public PlayerStateUi State;
     public float maxhealth;
     public float curhealth;
@@ -222,6 +223,17 @@ public class Player : MonoBehaviour
                 curhealth -= enemyBullet.damage;
                 StartCoroutine(OnDamage());
             }
+        }
+        if (other.tag == "Portal")
+        {
+            enemySpawn.enemyStart();
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Portal")
+        {
+            enemySpawn.enemyEnd();
         }
     }
     IEnumerator OnDamage()
