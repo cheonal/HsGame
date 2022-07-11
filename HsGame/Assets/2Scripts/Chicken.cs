@@ -193,6 +193,7 @@ public class Chicken : MonoBehaviour
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
                 isDead = true;
+                QuestManager.questManager.ChickenPoint++;
             }
 
             Destroy(gameObject, 4);

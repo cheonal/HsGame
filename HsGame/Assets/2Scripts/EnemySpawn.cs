@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
+    public enum Type { A, B };
+    public Type enumType;
     public Transform[] enemyzone;
-    public GameObject[] Chicken;
+    public GameObject[] Enemy;
     public List<int> enemylist;
     GameObject instantEnemy;
-    public List<GameObject> enemychickenlist;
+    public List<GameObject> enemyObjlist;
     void Awake()
     {
-        enemychickenlist = new List<GameObject>();
+        enemyObjlist = new List<GameObject>();
         enemylist = new List<int>();
     }
     public void enemyStart()
     {
-        StartCoroutine("ChickenZone");   
+        StartCoroutine("ChickenZone");
     }
+    
     IEnumerator ChickenZone()
     {
         for (int i = 0; i < 7; i++)
@@ -25,25 +28,24 @@ public class EnemySpawn : MonoBehaviour
             int ran = Random.Range(0, 2);
             enemylist.Add(ran);
         }
-        while (enemylist.Count > 0)
+        while (enemylist.Count > 0 && enemylist.Count < 10)
         {
             for (int i = 0; i < 7; i++)
             {
-                instantEnemy = Instantiate(Chicken[enemylist[0]],
+                instantEnemy = Instantiate(Enemy[enemylist[0]],
                     enemyzone[i].position, enemyzone[i].rotation);
                 enemylist.RemoveAt(0);
-                enemychickenlist.Add(instantEnemy);
+                enemyObjlist.Add(instantEnemy);
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f);
         }
     }
     public void enemyEnd()
     {
-
         for (int i = 0; i < 7; i++)
         {
-            Destroy(enemychickenlist[i]);
+            Destroy(enemyObjlist[i]);
         }
-        enemychickenlist.Clear();
+        enemyObjlist.Clear();
     }
 }

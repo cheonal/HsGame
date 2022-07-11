@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        StopToWall();
         Move();
         Getinput();
         Attack();
@@ -229,6 +230,13 @@ public class Player : MonoBehaviour
             enemySpawn.enemyStart();
         }
     }
+   /* void OnTriggerStay(Collider other)
+    {
+        if(other.tag == "Portal")
+        {
+            enemySpawn.enemyStart();
+        }
+    }*/
     void OnTriggerExit(Collider other)
     {
         if(other.tag == "Portal")
@@ -483,7 +491,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         FrezzeRotaiton();
-        StopToWall();
+
         Scan();
     }
 

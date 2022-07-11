@@ -193,6 +193,7 @@ public class Enemy : MonoBehaviour
                 gameObject.layer = 10;
                 isDead = true;
                 isChase = false;
+                QuestManager.questManager.EnemyPoint++;
                 nav.enabled = false;
                 anim.SetTrigger("doDie");
                 reactVec = reactVec.normalized;
