@@ -94,18 +94,25 @@ public class QuestManager : MonoBehaviour
     {
         switch (questId)
         {
+            case 30:
+                if (questActionIndex == 0)
+                {
+                    ChickenPoint = 0;
+                }
+                break;
             case 60:
                 if (questActionIndex == 1)
                     questObject[0].SetActive(true);
                 if (questActionIndex == 2)
                     questObject[0].SetActive(false);
                 break;
-            case 30:
-                if(questActionIndex == 0)
+            case 90:
+                if (questActionIndex == 0)
                 {
-                    ChickenPoint = 0;
+                    EnemyPoint = 0;
                 }
                 break;
+
         }
     }
 }

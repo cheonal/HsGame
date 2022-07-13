@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public GameManager manager;
     public EnemySpawn enemySpawn;
+    public ChickenSpawn ChickenSpawn;
     public PlayerStateUi State;
     public float maxhealth;
     public float curhealth;
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour
     public bool skill4coolDown;
     public bool skillRcoolDown;
     public bool isCasting;
+    public bool isPortal;
     public Weapon Sword;
     public Weapon Wand;
     public Transform cameraArm;
@@ -75,7 +77,6 @@ public class Player : MonoBehaviour
     public void Start()
     {
         player = this.GetComponent<Player>();
-       
     }
     void Awake()
     {
@@ -225,23 +226,34 @@ public class Player : MonoBehaviour
                 StartCoroutine(OnDamage());
             }
         }
-        if (other.tag == "Portal")
+       if (other.tag == "Portal")
         {
-            enemySpawn.enemyStart();
+            if(other.name == "MetalEnemySpawn")
+            {
+                isPortal = true;
+               // enemySpawn.enemyStart();
+            }
+            if (other.name == "ChickenSpawn")
+            {
+                ChickenSpawn.ChickenStart();
+            }
         }
     }
-   /* void OnTriggerStay(Collider other)
-    {
-        if(other.tag == "Portal")
-        {
-            enemySpawn.enemyStart();
-        }
-    }*/
+
     void OnTriggerExit(Collider other)
     {
         if(other.tag == "Portal")
         {
-            enemySpawn.enemyEnd();
+            if (other.name == "MetalEnemySpawn")
+            {
+                isPortal = false;
+                enemySpawn.enemyEnd();
+            }
+            else if (other.name == "ChickenSpawn")
+            {
+                ChickenSpawn.chickenEnd();
+            }
+
         }
     }
     IEnumerator OnDamage()

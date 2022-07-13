@@ -193,13 +193,14 @@ public class Enemy : MonoBehaviour
                 gameObject.layer = 10;
                 isDead = true;
                 isChase = false;
-                QuestManager.questManager.EnemyPoint++;
                 nav.enabled = false;
                 anim.SetTrigger("doDie");
                 reactVec = reactVec.normalized;
                 reactVec += Vector3.up;
                 rigid.AddForce(reactVec, ForceMode.Impulse);
             }
+            QuestManager.questManager.EnemyPoint++;
+            EnemySpawn.enemySpawn.EnemyCount--;
             Destroy(gameObject, 4);
             Player.player.curexp += 15;
         }

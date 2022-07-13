@@ -112,8 +112,6 @@ public class Chicken : MonoBehaviour
 
     IEnumerator Walk()
     {
-
-
         yield return new WaitForSeconds(0.1f);
         isWalk = true;
         anim.SetBool("Walk", true);
