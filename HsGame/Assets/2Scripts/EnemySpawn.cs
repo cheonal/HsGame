@@ -28,7 +28,7 @@ public class EnemySpawn : MonoBehaviour
         {
             StartCoroutine("EnemyZone");
         }
-        Invoke("spawnstart", 5f);
+        Invoke("spawnstart", 1f);
     }
     IEnumerator EnemyZone()
     {

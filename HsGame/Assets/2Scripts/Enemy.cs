@@ -15,10 +15,10 @@ public class Enemy : MonoBehaviour
     public bool isDead;
     public Image hpbar;
 
-    MeshRenderer [] meshs;
-    NavMeshAgent nav;
-    Rigidbody rigid;
-    Animator anim;
+    public MeshRenderer [] meshs;
+    public NavMeshAgent nav;
+    public Rigidbody rigid;
+    public Animator anim;
     
     void Awake()
     {
