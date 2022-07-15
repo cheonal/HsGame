@@ -15,15 +15,10 @@ public class Boss : MonoBehaviour
     public bool isDead;
     public Image hpbar;
     MeshRenderer[] meshs;
-    NavMeshAgent nav;
+    public NavMeshAgent nav;
     Rigidbody rigid;
     Animator anim;
-    public GameObject Missle;
-    public Transform MisslePort;
     public bool isLook;
-
-    Vector3 lookVec;
-    Vector3 tauntVec;   
 
     void Awake()
     {
@@ -31,42 +26,66 @@ public class Boss : MonoBehaviour
         meshs = GetComponentsInChildren<MeshRenderer>();
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-       // nav.isStopped = true;
-        //StartCoroutine("Think");
+    }
+    void ChaseStart()
+    {
+        RaycastHit[] rayfindHits =
+         Physics.SphereCastAll(transform.position, 100,
+                              Vector3.up, 0,
+                               LayerMask.GetMask("Player"));
+        if (rayfindHits.Length > 0)
+        {
+            isSearch = true;
+        }
+        else
+        {
+            isSearch = false;
+        }
+
+        if (isSearch == true)
+        {
+            isChase = true;
+            anim.SetBool("isWalk", true);
+        }
+        else
+        {
+            anim.SetBool("isWalk", false);
+        }
     }
 
     void Update()
     {
-        Targeting();
-        if (isDead)
-        {
-            StopAllCoroutines();
-            return;
-        }
-        else
+        if (nav.enabled && isSearch)
         {
             nav.SetDestination(Target.position);
+            nav.isStopped = !isSearch;
         }
         if (isAttack)
         {
             this.nav.velocity = Vector3.zero;
         }
-            anim.SetBool("isWalk", true);
-
-        /*if (isLook)
+    }
+    void FrezzeVelocity()
+    {
+        if (isChase)
         {
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-            lookVec = new Vector3(h, 0, v) * 5f;
-            transform.LookAt(Target.position + lookVec);
-        }*/
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+        }
+
+    }
+    void FixedUpdate()
+    {
+        ChaseStart();
+        Targeting();
+        FrezzeVelocity();
     }
     void Targeting()
     {
         if (!isDead)
         {
             float targetRadius = 1.5f;
-            float targetRange = 10f;
+            float targetRange = 15f;
 
             RaycastHit[] rayHits =
                       Physics.SphereCastAll(transform.position, targetRadius,
@@ -101,49 +120,45 @@ public class Boss : MonoBehaviour
     }
     IEnumerator Attack1()
     {
-        anim.SetTrigger("Attack1");
+        isChase = false;
         isAttack = true;
+        anim.SetTrigger("Attack2");
         meleeArea.enabled = true;
         yield return new WaitForSeconds(1f);
         meleeArea.enabled = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+        isChase = true;
         isAttack = false;
-        StartCoroutine(Think());
     }
     IEnumerator Attack2()
     {
-        anim.SetTrigger("Attack2");
+        isChase = false;
         isAttack = true;
-        yield return new WaitForSeconds(1f);
+        anim.SetTrigger("Rush");
+        yield return new WaitForSeconds(2f);
+        isChase = true;
         isAttack = false;
-        StartCoroutine(Think());
     }
 
     IEnumerator Junp()
     {
-        anim.SetTrigger("Jump");
+        isChase = false;
         isAttack = true;
-        yield return new WaitForSeconds(1f);
+        anim.SetTrigger("Jump");
+        yield return new WaitForSeconds(2f);
+        isChase = true;
         isAttack = false;
-        StartCoroutine(Think());
     }
     IEnumerator Rush()
     {
-        anim.SetTrigger("Rush");
+        isChase = false;
         isAttack = true;
-        yield return new WaitForSeconds(1f);
+        anim.SetTrigger("Attack1");
+        yield return new WaitForSeconds(2f);
+        isChase = true;
         isAttack = false;
-        StartCoroutine(Think());
     }
-    void FixedUpdate()
-    {
-        FrezzeVelocity();
-    }
-    void FrezzeVelocity()
-    {
-        rigid.velocity = Vector3.zero;
-        rigid.angularVelocity = Vector3.zero;
-    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Weapon")

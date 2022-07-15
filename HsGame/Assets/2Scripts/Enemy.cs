@@ -103,7 +103,6 @@ public class Enemy : MonoBehaviour
 
     void Targeting()
     {
-
         if (!isDead)
         {
             float targetRadius = 1.5f;
@@ -119,7 +118,6 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(Attack());
             }
         }
-
     }
 
     IEnumerator Attack()
