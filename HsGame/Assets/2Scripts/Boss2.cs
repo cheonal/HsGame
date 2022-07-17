@@ -5,10 +5,16 @@ using UnityEngine.AI;
 public class Boss2 : MonoBehaviour
 {
     public Transform Target;
+    public Transform RockSpawn;
     public NavMeshAgent nav;
     public bool canAttack;
     public bool AttackCoolDown;
     public bool isChase;
+    public GameObject Rock;
+    public GameObject MeleeArea;
+    public GameObject RushArea;
+    public GameObject JumpArea;
+    public GameObject JumpWarning;
     Animator anim;
     Rigidbody rigid;
     void Awake()
@@ -17,16 +23,20 @@ public class Boss2 : MonoBehaviour
       //  meshs = GetComponentsInChildren<MeshRenderer>();
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-        Invoke("SearchAttck", 2f);
+        SearchAttck();
     }
     void Update()
     {
         Chase();
         CanAttack();
-        Attack();
     }
     void Chase()
     {
+        if (isChase && !AttackCoolDown)
+        {
+            nav.SetDestination(Target.position);
+            anim.SetBool("isWalk", true);
+        }
         if (AttackCoolDown)
         {
             this.nav.velocity = Vector3.zero;
@@ -39,13 +49,24 @@ public class Boss2 : MonoBehaviour
         {
             nav.isStopped = false;
         }
-        if (isChase && !AttackCoolDown)
+
+    }
+    void CanAttack()
+    {
+        RaycastHit[] rayfindHits =
+       Physics.SphereCastAll(transform.position, 30,
+                            Vector3.up, 0f,
+                             LayerMask.GetMask("Player"));
+        if (rayfindHits.Length > 0)
         {
-            nav.SetDestination(Target.position);
-            anim.SetBool("isWalk",true);
+            canAttack = true;
+            isChase = false;
         }
-
-
+        else
+        {
+            canAttack = false;
+            isChase = true;
+        }
     }
     void SearchAttck()
     {
@@ -55,36 +76,17 @@ public class Boss2 : MonoBehaviour
         }
         Invoke("SearchAttck", 1f);
     }
-    void CanAttack()
-    {
-        RaycastHit[] rayfindHits =
-       Physics.SphereCastAll(transform.position, 30,
-                            Vector3.up, 0f,
-                             LayerMask.GetMask("Player"));
-        if (rayfindHits.Length>0)
-        {
-            canAttack = true;
-            isChase = false;
-        }else
-        {
-            canAttack = false;
-            isChase = true;
-        }
-    }
-    void Attack()
-    {
 
-    }
     IEnumerator Think()
     {
-        int ranAction = Random.Range(0, 4);
+        int ranAction = Random.Range(0, 5);
         switch (ranAction)
         {
             case 0:
-                StartCoroutine("Attack1"); // 근접공격
+                StartCoroutine("Attack1"); // 돌던지기
                 break;
             case 1:
-                StartCoroutine("Attack2"); // 돌던지기
+                StartCoroutine("Attack2"); // 근접공격
                 break;
             case 2:
                 StartCoroutine("Jump"); // 점프공격
@@ -97,43 +99,64 @@ public class Boss2 : MonoBehaviour
     }
     IEnumerator Attack1()
     {
+        transform.LookAt(Target);
         anim.SetTrigger("Attack1");
         AttackCoolDown = true;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.1f);
+        RockSpawn.LookAt(Target);
+        GameObject Rock2 = Instantiate(Rock, RockSpawn.position, RockSpawn.rotation);
+        Rigidbody RockRigid = Rock2.GetComponent<Rigidbody>();
+        RockRigid.velocity = RockSpawn.forward * 50;
 
+        yield return new WaitForSeconds(2f);
+        Destroy(Rock2);
+
+        yield return new WaitForSeconds(1f);
         AttackCoolDown = false;
-        Debug.Log("1");
     }
     IEnumerator Attack2()
     {
         anim.SetTrigger("Attack2");
         AttackCoolDown = true;
-
-        yield return new WaitForSeconds(2f);
-
+        yield return new WaitForSeconds(1f);
+        MeleeArea.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        MeleeArea.SetActive(false);
+        yield return new WaitForSeconds(1.5f);
         AttackCoolDown = false;
-        Debug.Log("2");
+
     }
 
     IEnumerator Jump()
     {
-        anim.SetTrigger("Jump");
+        JumpWarning.SetActive(true);    
         AttackCoolDown = true;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
+        anim.SetTrigger("Jump");    
 
+        yield return new WaitForSeconds(0.3f);
+        JumpArea.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+        JumpArea.SetActive(false);
+        JumpWarning.SetActive(false);
+        yield return new WaitForSeconds(1f);
         AttackCoolDown = false;
-        Debug.Log("2");
+
     }
     IEnumerator Rush()
     {
+        transform.LookAt(Target);
         anim.SetTrigger("Rush");
         AttackCoolDown = true;
-
-        yield return new WaitForSeconds(5f);
-
+        yield return new WaitForSeconds(1f);
+        rigid.AddForce(transform.forward * 90, ForceMode.Impulse);
+        RushArea.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        RushArea.SetActive(false);
+        rigid.velocity = Vector3.zero;
+        yield return new WaitForSeconds(3f);
         AttackCoolDown = false;
-        Debug.Log("2");
     }
     void FrezzeVelocity()
     {

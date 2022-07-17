@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public Transform characterBody;
     public Camera followCamera;
     public GameObject item3On;
+    public GameObject HitEffect;
     bool isDead;
     bool canAttack = true;
     bool canDodge = true;
@@ -231,7 +232,9 @@ public class Player : MonoBehaviour
             if(other.name == "MetalEnemySpawn")
             {
                 isPortal = true;
-               // enemySpawn.enemyStart();
+                HitEffect.SetActive(true);
+              //  HitEffect.SetActive(false);
+                // enemySpawn.enemyStart();
             }
             if (other.name == "ChickenSpawn")
             {
@@ -264,12 +267,14 @@ public class Player : MonoBehaviour
             isDead = true;
         }
         isDamage = true;
+        GameObject HitEffect1 = Instantiate(HitEffect, transform.position+Vector3.up*2, transform.rotation);
         foreach (MeshRenderer mesh in meshs)
         {
             mesh.material.color = Color.gray;
         }
         yield return new WaitForSeconds(1f);
         isDamage = false;
+
         foreach (MeshRenderer mesh in meshs)
         {
             mesh.material.color = Color.white;
