@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     public RectTransform PlayerHp;
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
+    public RectTransform BossHp;
+    public GameObject BossGroup;
     public GameObject ElixirMini;
     public RectTransform ElixirMiniGuage;
     public GameObject PlayerWand;
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour
     public int talkIndex;
     public Text QuestText;
     public bool isTalk;
-
+    AudioSource audioSource;
     float ElixirMiniTime;
     float Item1;
     float Item2;
@@ -56,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         Debug.Log(questManager.CheckQuest());
     }
     void Update()
@@ -75,12 +78,14 @@ public class GameManager : MonoBehaviour
         PlayerHp.localScale = new Vector2((float)(Player.player.curhealth / Player.player.maxhealth), 1);
         PlayerMp.localScale = new Vector2((float)(Player.player.curmana / Player.player.maxmana), 1);
         PlayerExp.localScale = new Vector2((float)(Player.player.curexp / Player.player.maxexp), 1);
+        BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
         Lv.text = "" + player.PlayerLv;
     }
     void LvUp()
     {
         if (player.curexp > player.maxexp)
         {
+            audioSource.Play();
             player.PlayerLv += 1;
             player.curexp -= player.maxexp;
             player.maxexp += 10;

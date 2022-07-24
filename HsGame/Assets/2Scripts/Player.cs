@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
     public Camera followCamera;
     public GameObject item3On;
     public GameObject HitEffect;
+    private AudioSource audiosoruce;
+    [SerializeField] private AudioClip[] clip;
     bool isDead;
     bool canAttack = true;
     bool canDodge = true;
@@ -81,6 +83,7 @@ public class Player : MonoBehaviour
     }
     void Awake()
     {
+        audiosoruce = GetComponent<AudioSource>();
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         meshs = GetComponentsInChildren<MeshRenderer>();
@@ -99,6 +102,7 @@ public class Player : MonoBehaviour
         Talk();
         StateOn();
         UseItem();
+        StateControll();
     }
 
     void Getinput()
@@ -216,6 +220,17 @@ public class Player : MonoBehaviour
             }
         }
     }
+    void StateControll()
+    {
+        if (curhealth < 0)
+        {
+            curhealth = 0;
+        }
+        if (curmana < 0)
+        {   
+            curmana = 0;
+        }
+    }
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Enemy Bullet")
@@ -286,7 +301,9 @@ public class Player : MonoBehaviour
         if (sDown1 && !isSwap && canAttack && !isCasting && !manager.isTalk) // 소드
         {
             anim.SetTrigger("doSwap");
-            if(hasweaponindex == 1) // 소드를 들고있을때
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
+            if (hasweaponindex == 1) // 소드를 들고있을때
             {
                 Weapons[0].SetActive(false);
                 hasweaponindex = 0;
@@ -310,6 +327,8 @@ public class Player : MonoBehaviour
         if (sDown2 && !isSwap && canAttack && !isCasting && !manager.isTalk) //완드
         {
             anim.SetTrigger("doSwap");
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
             if (hasweaponindex == 2) // 완드를 들고있을때
             {
                 Weapons[1].SetActive(false);
@@ -342,6 +361,9 @@ public class Player : MonoBehaviour
         canAttack = 0.7 < firedelay;
         if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap && !manager.isTalk)
         {
+            audiosoruce.clip = clip[1];
+            audiosoruce.Play();
+
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Sword.Swing();
             anim.SetTrigger("doAttack1");
@@ -410,6 +432,8 @@ public class Player : MonoBehaviour
             Invoke("Magicout", 0.7f);
             if (skillRcasting >= 1)
             {
+                audiosoruce.clip = clip[2];
+                audiosoruce.Play();
                 curmana -= 20;
                 Wand.MagicRsucces();
                 Invoke("SkillRcool", 10f);

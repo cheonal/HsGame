@@ -8,11 +8,13 @@ public class MagicArea : MonoBehaviour
     public GameObject MagicObj;
     SphereCollider Area;
     public static MagicArea magicArea;
+    private AudioSource audiosoruce;
     public enum Type { skill1, skill4 };
     public Type enumType;
 
     void Awake()
     {
+        audiosoruce = GetComponent<AudioSource>();
         magicArea = this.GetComponent<MagicArea>();
         Area = GetComponent<SphereCollider>();
         switch (enumType)
@@ -56,6 +58,7 @@ public class MagicArea : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Area.enabled = true;
+        audiosoruce.Play();
         yield return new WaitForSeconds(0.1f);
         StartCoroutine("Magic1Off");
 
@@ -70,6 +73,7 @@ public class MagicArea : MonoBehaviour
     IEnumerator Magic1On()
     {
         yield return new WaitForSeconds(0.1f);
+        audiosoruce.Play();
         Area.enabled = true;
         yield return new WaitForSeconds(0.1f);
         StartCoroutine("Magic1Off");
@@ -79,6 +83,7 @@ public class MagicArea : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         Area.enabled = true;
+        audiosoruce.Play();
         yield return new WaitForSeconds(0.5f);
         Area.enabled = false;
     }

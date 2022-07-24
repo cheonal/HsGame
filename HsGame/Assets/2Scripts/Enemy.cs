@@ -19,9 +19,11 @@ public class Enemy : MonoBehaviour
     public NavMeshAgent nav;
     public Rigidbody rigid;
     public Animator anim;
-    
+    private AudioSource audiosoruce;
+    [SerializeField] private AudioClip[] clip;
     void Awake()
     {
+        audiosoruce = GetComponent<AudioSource>();
         meshs = GetComponentsInChildren<MeshRenderer>();
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
@@ -125,7 +127,8 @@ public class Enemy : MonoBehaviour
         isChase = false;
         isAttack = true;
         anim.SetBool("isAttack", true);
-
+        audiosoruce.clip = clip[0];
+        audiosoruce.Play();
 
         yield return new WaitForSeconds(0.2f);
         meleeArea.enabled = true;
@@ -145,6 +148,8 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Weapon")
         {
+            audiosoruce.clip = clip[1];
+            audiosoruce.Play();
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.Damage;
             Vector3 reactVec = transform.position - other.transform.position;
@@ -187,6 +192,8 @@ public class Enemy : MonoBehaviour
         {
             foreach (MeshRenderer mesh in meshs)
             {
+                audiosoruce.clip = clip[2];
+                audiosoruce.Play();
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
                 isDead = true;

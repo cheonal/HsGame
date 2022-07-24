@@ -9,10 +9,13 @@ public class MagicArrow : MonoBehaviour
     public GameObject MagicObj;
     public static MagicArrow magicArrow;
     Rigidbody rigid;
+    private AudioSource audiosoruce;
+    //[SerializeField] private AudioClip[] clip;
     public enum Type {skill2,skill3,skill5};
     public Type enumType;
     void Awake()
     {
+        audiosoruce = GetComponent<AudioSource>();
         rigid = GetComponent<Rigidbody>();
         magicArrow = this.GetComponent<MagicArrow>();
     }
@@ -62,17 +65,18 @@ public class MagicArrow : MonoBehaviour
         }
         if (other.gameObject.tag == "Enemy")
         {
+            audiosoruce.Play();
             Explode = Instantiate(Explode, transform.position, transform.rotation);
             Destroy(Explode, 2f);
             switch (enumType)
             {
                 case Type.skill2:
-                    {
+                    {              
                         rigid.velocity = Vector3.zero;
                         Destroy(MagicObj, 0.5f);
                         Destroy(gameObject, 0.5f);
+                        break;
                     }
-                    break;
             }
         }
     }

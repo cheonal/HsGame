@@ -46,9 +46,11 @@ public class PlayerStateUi : MonoBehaviour
     public bool Item2CoodDown;
     public bool Item3CoodDown;
     public bool Item4CoodDown;
-
+    private AudioSource audiosoruce;
+    [SerializeField] private AudioClip[] clip;
     public void Start()
     {
+        audiosoruce = GetComponent<AudioSource>();
         PlayerUI = this.GetComponent<PlayerStateUi>();
     }
 
@@ -188,6 +190,8 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (player.LvPoint > 0)
         {
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
             player.LvPoint -= 1;
             DamageUp += 1;
             weapon.Damage = 100 + (100 * (DamageUp * (float)0.1));
@@ -198,6 +202,8 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (player.LvPoint > 0)
         {
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
             player.LvPoint -= 1;
             SpeedUp += 1;
             player.moveSpeed = 15 + (15*(SpeedUp *(float)0.1));
@@ -207,6 +213,8 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (player.LvPoint > 0)
         {
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
             player.LvPoint -= 1;
             HpUp += 1;
             player.curhealth = 100 + (100 * (HpUp * (float)0.1));
@@ -217,6 +225,8 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (player.LvPoint > 0)
         {
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
             player.LvPoint -= 1;
             MpUp += 1;
             player.curmana = 100 + (100 * (MpUp * (float)0.1));
@@ -227,6 +237,8 @@ public class PlayerStateUi : MonoBehaviour
     {  
         if (Item1Count > 0 && !Item1CoodDown)
         {
+            audiosoruce.clip = clip[1];
+            audiosoruce.Play();
             Item1Count -= 1;
             player.curhealth += player.maxhealth * (float)0.5;
             Item1CoodDown = true;
@@ -246,6 +258,8 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (Item2Count > 0 && !Item2CoodDown)
         {
+            audiosoruce.clip = clip[1];
+            audiosoruce.Play();
             Item2Count -= 1;
             player.curmana += player.maxmana * (float)0.3;
             Item2CoodDown = true;
@@ -265,6 +279,8 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (Item3Count > 0 && !Item3CoodDown)
         {
+            audiosoruce.clip = clip[1];
+            audiosoruce.Play();
             Item3Count -= 1;
             weapon.Damage += weapon.Damage * (float)0.2;
             player.moveSpeed += player.moveSpeed * (float)0.3;

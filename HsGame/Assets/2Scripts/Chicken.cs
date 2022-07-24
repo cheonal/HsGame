@@ -18,8 +18,11 @@ public class Chicken : MonoBehaviour
     float DeadCount;
     public int speed;
     public Vector3 movevec;
+    private AudioSource audiosoruce;
+    [SerializeField] private AudioClip[] clip;
     void Awake()
     {
+        audiosoruce = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         StartCoroutine(Action());
         Invoke("Move", 2);
@@ -172,6 +175,8 @@ public class Chicken : MonoBehaviour
     {
         foreach (SkinnedMeshRenderer mesh in meshs)
         {
+            audiosoruce.clip = clip[0];
+            audiosoruce.Play();
             mesh.material.color = Color.red;
         }
         yield return new WaitForSeconds(0.1f);
@@ -188,6 +193,8 @@ public class Chicken : MonoBehaviour
         {
             foreach (SkinnedMeshRenderer mesh in meshs)
             {
+                audiosoruce.clip = clip[1];
+                audiosoruce.Play();
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
                 isDead = true;
