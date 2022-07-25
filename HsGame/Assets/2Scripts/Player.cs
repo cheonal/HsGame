@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     public GameObject HitEffect;
     private AudioSource audiosoruce;
     [SerializeField] private AudioClip[] clip;
-    bool isDead;
+    public bool isDead;
     bool canAttack = true;
     bool canDodge = true;
     bool isJump;
@@ -148,26 +148,25 @@ public class Player : MonoBehaviour
     }
     void Move()
     {
-
         Vector3 moveVec = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         bool isMove = moveVec.magnitude != 0;
         anim.SetBool("isRun", isMove);
         lookforward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
         lookright = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
         movedir = lookforward * moveVec.y + lookright * moveVec.x;
-        if (!canAttack || isSwap || isCasting || manager.isTalk || isDead)
+        if (!canAttack || isSwap || isCasting || manager.isTalk && !isDead)
         {
             movedir = Vector3.zero;
         }
-        if (manager.isTalk)
+        if (manager.isTalk && !isDead)
         {
             anim.SetBool("isRun", false);
         }
-        if (isMove && canAttack && !isCasting && !manager.isTalk && !isSwap || isDead)
+        if (isMove && canAttack && !isCasting && !manager.isTalk && !isSwap && !isDead)
         {
             characterBody.forward = movedir;
         }
-        if (!iswallF && !iswallL && !iswallR)
+        if (!iswallF && !iswallL && !iswallR && !isDead)
         {
             transform.position += movedir * moveSpeed * Time.deltaTime;
         }
@@ -248,8 +247,6 @@ public class Player : MonoBehaviour
             {
                 isPortal = true;
                 HitEffect.SetActive(true);
-              //  HitEffect.SetActive(false);
-                // enemySpawn.enemyStart();
             }
             if (other.name == "ChickenSpawn")
             {
@@ -278,6 +275,8 @@ public class Player : MonoBehaviour
     {
         if (curhealth <= 0)
         {
+            audiosoruce.clip = clip[3];
+            audiosoruce.Play();
             anim.SetTrigger("doDie");
             isDead = true;
         }
@@ -359,7 +358,7 @@ public class Player : MonoBehaviour
     {
         firedelay += Time.deltaTime;
         canAttack = 0.7 < firedelay;
-        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap && !manager.isTalk)
+        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap && !manager.isTalk && !isDead)
         {
             audiosoruce.clip = clip[1];
             audiosoruce.Play();
@@ -370,7 +369,7 @@ public class Player : MonoBehaviour
             firedelay = 0;
         }
         else if ((skill1Down || skill2Down || skill3Down || skill4Down)
-            && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !manager.isTalk)
+            && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !manager.isTalk && !isDead)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);    
             if (skill1Down && !skill1coolDown && curmana > 0)
@@ -410,13 +409,13 @@ public class Player : MonoBehaviour
                 firedelay = -0.2f;
             }
         }
-        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0 && !manager.isTalk)
+        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0 && !manager.isTalk && !isDead)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Wand.MagicRstart();
             Wand.MagicRUp();
         }
-        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown && curmana > 0 && !manager.isTalk)
+        if (skillRcast && hasweaponindex == 2 && !isJump && !skillRcoolDown && curmana > 0 && !manager.isTalk && !isDead)
         {
             isCasting = true;
             anim.SetTrigger("doShot");
@@ -426,7 +425,7 @@ public class Player : MonoBehaviour
                 skillRUp = true;
             }
         }
-        if (skillRUp && !skillRcoolDown && curmana > 0)
+        if (skillRUp && !skillRcoolDown && curmana > 0 && !isDead)
         {
             Wand.MagicRUp();
             Invoke("Magicout", 0.7f);
@@ -490,6 +489,14 @@ public class Player : MonoBehaviour
             isJump = false;
 
         }
+    }
+    public void ReBirth()
+    {
+        curhealth = maxhealth;
+        curmana = maxmana;
+        transform.position = new Vector3(-6, 1, 12);
+        isDead = false;
+        anim.SetTrigger("ReBirth");
     }
     void Dodgeout()
     {

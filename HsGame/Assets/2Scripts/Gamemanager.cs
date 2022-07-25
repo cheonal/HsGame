@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerState;
     public GameObject scanObject;
     public GameObject NpcTalk;
-    public Image NpcImage;
+
+    [SerializeField] GameObject GameOverState;
+    [SerializeField] Text GameOverText;
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
@@ -59,7 +61,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        Debug.Log(questManager.CheckQuest());
     }
     void Update()
     {
@@ -68,17 +69,18 @@ public class GameManager : MonoBehaviour
         SkillR();
         State();
         LvUp();
+        GameOver();
     }
     void Quest()
     {
-        QuestText.text = "" + QuestManager.questManager.CheckQuest();
+        QuestText.text = "" + questManager.CheckQuest();
     }
     void State()
     {
         PlayerHp.localScale = new Vector2((float)(Player.player.curhealth / Player.player.maxhealth), 1);
         PlayerMp.localScale = new Vector2((float)(Player.player.curmana / Player.player.maxmana), 1);
         PlayerExp.localScale = new Vector2((float)(Player.player.curexp / Player.player.maxexp), 1);
-        BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
+      //  BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
         Lv.text = "" + player.PlayerLv;
     }
     void LvUp()
@@ -91,6 +93,16 @@ public class GameManager : MonoBehaviour
             player.maxexp += 10;
             player.LvPoint += 1;
         }
+    }
+    void GameOver()
+    {
+        if (player.curhealth <= 0)
+        {
+            GameOverText.text = "현재 진행중인 퀘스트"+"\n" + ">>"+questManager.CheckQuest();
+            PlayerState.SetActive(false);
+            GameOverState.SetActive(true);
+        }
+        
     }
     void CoolDown()
     {
@@ -234,6 +246,12 @@ public class GameManager : MonoBehaviour
             Guage = 0;
         }
         skillRGuageFront.localScale = new Vector3(Guage * 100 / 100, 1, 1);
+    }
+    public void ButtonOn()
+    {
+        PlayerState.SetActive(true);
+        GameOverState.SetActive(false);
+        player.ReBirth();
     }
     public void Action(GameObject scanObj)
     {
