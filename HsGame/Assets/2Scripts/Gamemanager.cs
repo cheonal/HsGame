@@ -37,9 +37,16 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerState;
     public GameObject scanObject;
     public GameObject NpcTalk;
-
+    [SerializeField] GameObject GameStartState;
     [SerializeField] GameObject GameOverState;
+    [SerializeField] Image GameStartButton;
     [SerializeField] Text GameOverText;
+    [SerializeField] GameObject GameStartCamera;
+    [SerializeField] GameObject PlayerCamera;
+    [SerializeField] GameObject PlayerCh;
+    [SerializeField] GameObject slime1;
+    [SerializeField] GameObject slime2;
+    [SerializeField] GameObject slime3;
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
@@ -57,17 +64,30 @@ public class GameManager : MonoBehaviour
     float skill4;
     float skill5;
     float Guage;
-
+    bool GameOn;
+    bool BossOn;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+    public void GameStart()
+    {
+        PlayerCh.SetActive(true);
+        slime1.SetActive(true);
+        slime2.SetActive(true);
+        slime3.SetActive(true);
+        GameStartCamera.SetActive(false);
+        PlayerCamera.SetActive(true);
+        GameStartState.SetActive(false);
+        PlayerState.SetActive(true);
+        GameOn = true;
     }
     void Update()
     {
         Quest();
         CoolDown();
         SkillR();
-        State();
+        Invoke("State",0.5f);
         LvUp();
         GameOver();
     }
@@ -77,11 +97,17 @@ public class GameManager : MonoBehaviour
     }
     void State()
     {
-        PlayerHp.localScale = new Vector2((float)(Player.player.curhealth / Player.player.maxhealth), 1);
-        PlayerMp.localScale = new Vector2((float)(Player.player.curmana / Player.player.maxmana), 1);
-        PlayerExp.localScale = new Vector2((float)(Player.player.curexp / Player.player.maxexp), 1);
-      //  BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
-        Lv.text = "" + player.PlayerLv;
+        if (GameOn)
+        {
+            PlayerHp.localScale = new Vector2((float)(Player.player.curhealth / Player.player.maxhealth), 1);
+            PlayerMp.localScale = new Vector2((float)(Player.player.curmana / Player.player.maxmana), 1);
+            PlayerExp.localScale = new Vector2((float)(Player.player.curexp / Player.player.maxexp), 1);
+            Lv.text = "" + player.PlayerLv;
+        }
+        if (BossOn)
+        {
+            BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
+        }
     }
     void LvUp()
     {
@@ -94,6 +120,7 @@ public class GameManager : MonoBehaviour
             player.LvPoint += 1;
         }
     }
+
     void GameOver()
     {
         if (player.curhealth <= 0)
