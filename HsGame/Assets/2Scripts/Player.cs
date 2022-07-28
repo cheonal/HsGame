@@ -252,6 +252,11 @@ public class Player : MonoBehaviour
             {
                 ChickenSpawn.ChickenStart();
             }
+            if( other.name == "BossPortal")
+            {
+                Debug.Log("11");
+                //캐릭터 전환 시전
+            }
         }
     }
 
@@ -487,7 +492,6 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isJump", false);
             isJump = false;
-
         }
     }
     public void ReBirth()
@@ -506,18 +510,15 @@ public class Player : MonoBehaviour
     void StopToWall()
     {
         iswallR = Physics.Raycast(characterBody.position, characterBody.forward, 1, LayerMask.GetMask("Wall"));
-       // iswallL = Physics.Raycast(characterBody.position + characterBody.right * 2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
-        //iswallF = Physics.Raycast(characterBody.position + characterBody.right * -2, characterBody.forward, 2, LayerMask.GetMask("Wall"));
-        Debug.DrawRay(characterBody.position, characterBody.forward  * 1 ,Color.green);
-        //Debug.DrawRay(characterBody.position + characterBody.right* 2, characterBody.forward * 2 ,Color.green);
-        //Debug.DrawRay(characterBody.position + characterBody.right*-2, characterBody.forward * 2 ,Color.green);
     }
     void Talk()
     {
-        if(TalkDown && scanObject != null)
+
+        if (TalkDown && scanObject != null)
         {
             manager.Action(scanObject);
         }
+        
     }
     void Scan()
     {

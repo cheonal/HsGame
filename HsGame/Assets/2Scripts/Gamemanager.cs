@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject slime1;
     [SerializeField] GameObject slime2;
     [SerializeField] GameObject slime3;
+    [SerializeField] Text EnemyCountText;
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
@@ -73,9 +74,7 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         PlayerCh.SetActive(true);
-        slime1.SetActive(true);
         slime2.SetActive(true);
-        slime3.SetActive(true);
         GameStartCamera.SetActive(false);
         PlayerCamera.SetActive(true);
         GameStartState.SetActive(false);
@@ -90,6 +89,7 @@ public class GameManager : MonoBehaviour
         Invoke("State",0.5f);
         LvUp();
         GameOver();
+        EnemyCount();
     }
     void Quest()
     {
@@ -106,7 +106,35 @@ public class GameManager : MonoBehaviour
         }
         if (BossOn)
         {
+            BossHp.anchoredPosition = new Vector2(0, 29);
             BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
+        }
+    }
+    void EnemyCount()
+    {
+        switch (questManager.questId)
+        {
+            case 30:
+                EnemyCountText.text = "식량창고를 되찾자" + questManager.ChickenPoint + "/7";
+                if(questManager.ChickenPoint == 7)
+                {
+                    EnemyCountText.text = "퀘스트 완료!";
+                }
+                break;
+            case 50:
+                EnemyCountText.text = "";
+                break;
+            case 90:
+                EnemyCountText.text = "무기창고를 되찾자" + questManager.EnemyPoint + "/10";
+                if (questManager.EnemyPoint == 10)
+                {
+                    EnemyCountText.text = "퀘스트 완료!";
+                }
+                break;
+            case 110:
+                EnemyCountText.text = "";
+                break;
+
         }
     }
     void LvUp()
@@ -280,6 +308,11 @@ public class GameManager : MonoBehaviour
         GameOverState.SetActive(false);
         player.ReBirth();
     }
+    public void TalkExit()
+    {
+        NpcTalk.SetActive(false);
+        PlayerState.SetActive(true);
+    }
     public void Action(GameObject scanObj)
     {
         scanObject = scanObj;
@@ -299,7 +332,7 @@ public class GameManager : MonoBehaviour
         {
             isTalk = false;     
             talkIndex = 0;
-            Debug.Log(questManager.CheckQuest(id)); 
+            questManager.CheckQuest(id); 
             return;
         }
         if (isNpc)
