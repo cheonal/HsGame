@@ -8,6 +8,7 @@ public class QuestManager : MonoBehaviour
     public int questActionIndex;
     public int ChickenPoint;
     public int EnemyPoint;
+    public GameManager gameManager;
     public static QuestManager questManager;
     public GameObject[] questObject;
     Dictionary<int, QuestData> questList;
@@ -47,6 +48,8 @@ public class QuestManager : MonoBehaviour
     , new int[] { 100 }));
         questList.Add(120, new QuestData("4번키를 눌러 대왕슬라임에게 돌아가자"
     , new int[] { 3000 }));
+        questList.Add(130, new QuestData("왕국의 영웅이 되었습니다!"
+, new int[] { 5000 }));
     }
     public int GetQuestTalkIndex(int id)
     {
@@ -54,15 +57,11 @@ public class QuestManager : MonoBehaviour
     }
     public string CheckQuest(int id)
     {
-
-
         //퀘스트 순서 진행
         if (id == questList[questId].npcId[questActionIndex])
         {
             questActionIndex++;
         }
-
-
         //다음 퀘스트로
         if (questActionIndex == questList[questId].npcId.Length)
         {
@@ -70,7 +69,6 @@ public class QuestManager : MonoBehaviour
         }
         //퀘스트 오브젝트 관리
         ControlObject();
-
         return questList[questId].questName;
     }
     public string CheckQuest()
@@ -137,6 +135,11 @@ public class QuestManager : MonoBehaviour
                     questObject[7].SetActive(false); // 보스몬스터 포탈 앞 나무장애물
                 }
                 break;
+            /*case 130:
+                {
+                    gameManager.GameEnd();
+                    break;
+                }*/
         }
     }
 }

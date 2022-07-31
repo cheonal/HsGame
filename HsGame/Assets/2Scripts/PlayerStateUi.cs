@@ -33,10 +33,11 @@ public class PlayerStateUi : MonoBehaviour
     public Text Posion1Count;
     public Text Posion2Count;
     public Text Posion3Count;
+    public GameManager gameManager;
     public float Item1Count;
     public float Item2Count;
     public float Item3Count;
-   // public float Item4Count;
+    public float Item4Count;
     public float DamageUp;
     public float SpeedUp;
     public float HpUp;
@@ -307,7 +308,10 @@ public class PlayerStateUi : MonoBehaviour
     {
         if (!Item4CoodDown)
         {
+            audiosoruce.clip = clip[1];
+            audiosoruce.Play();
             Item4CoodDown = true;
+            gameManager.ItemSpawn();
             Invoke("Item4UseOut", 60f);
         }
 

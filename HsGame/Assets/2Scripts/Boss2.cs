@@ -243,6 +243,7 @@ public class Boss2 : MonoBehaviour
                 reactVec += Vector3.up;
                 rigid.AddForce(reactVec, ForceMode.Impulse);
                 curHp = 0;
+                QuestManager.questManager.questId += 10;
             }
             Destroy(gameObject, 4);
         }

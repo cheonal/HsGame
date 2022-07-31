@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerState;
     public GameObject scanObject;
     public GameObject NpcTalk;
+    [SerializeField] RectTransform BossHpGruop;
     [SerializeField] GameObject GameStartState;
     [SerializeField] GameObject GameOverState;
     [SerializeField] Image GameStartButton;
@@ -48,6 +49,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject slime2;
     [SerializeField] GameObject slime3;
     [SerializeField] Text EnemyCountText;
+    [SerializeField] Text BossCountText;
+    [SerializeField] Transform BossRoom;
+    [SerializeField] Transform KingRoom;
+    [SerializeField] GameObject GameEndUi;
+    [SerializeField] Text GamePlayTimeText;
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
@@ -67,12 +73,14 @@ public class GameManager : MonoBehaviour
     float Guage;
     bool GameOn;
     bool BossOn;
+    float GamePlayTime;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
     public void GameStart()
     {
+        GamePlayTime += Time.deltaTime;
         PlayerCh.SetActive(true);
         slime2.SetActive(true);
         GameStartCamera.SetActive(false);
@@ -80,6 +88,7 @@ public class GameManager : MonoBehaviour
         GameStartState.SetActive(false);
         PlayerState.SetActive(true);
         GameOn = true;
+
     }
     void Update()
     {
@@ -90,6 +99,47 @@ public class GameManager : MonoBehaviour
         LvUp();
         GameOver();
         EnemyCount();
+        GameEnd();
+    }
+    public void BossRoomSpawn()
+    {
+        StartCoroutine("BossRoomSpawn1");
+    }
+    IEnumerator BossRoomSpawn1()
+    {
+        isTalk = true;
+        BossCountText.text = "3초뒤에 이동합니다";
+        yield return new WaitForSeconds(1f);
+
+        BossCountText.text = "2초뒤에 이동합니다";
+        yield return new WaitForSeconds(1f);
+
+        BossCountText.text = "1초뒤에 이동합니다";
+        yield return new WaitForSeconds(1f);
+
+        BossCountText.text = "";
+        player.transform.position = BossRoom.position;
+        BossOn = true;
+        isTalk = false;
+    }
+    public void ItemSpawn()
+    {
+        StartCoroutine("ItemSpawn1");
+    }
+    IEnumerator ItemSpawn1()
+    {
+        BossCountText.text = "3초뒤에 이동합니다";
+        yield return new WaitForSeconds(1f);
+
+        BossCountText.text = "2초뒤에 이동합니다";
+        yield return new WaitForSeconds(1f);
+
+        BossCountText.text = "1초뒤에 이동합니다";
+        yield return new WaitForSeconds(1f);
+
+        BossCountText.text = "";
+        player.transform.position = KingRoom.position;
+        BossOn = false;
     }
     void Quest()
     {
@@ -106,8 +156,12 @@ public class GameManager : MonoBehaviour
         }
         if (BossOn)
         {
-            BossHp.anchoredPosition = new Vector2(0, 29);
+            BossHpGruop.anchoredPosition = new Vector2(0, 0);
             BossHp.localScale = new Vector2((float)(Boss2.boss.curHp / Boss2.boss.MaxHp), 1);
+        }
+        else
+        {
+            BossHpGruop.anchoredPosition = new Vector2(0, 180);
         }
     }
     void EnemyCount()
@@ -321,6 +375,26 @@ public class GameManager : MonoBehaviour
         NpcTalk.SetActive(isTalk);
         PlayerState.SetActive(!isTalk);
     }
+    void GameEnd()
+    {
+        if(questManager.questId == 130)
+        {
+            int hour = (int)(GamePlayTime / 3600);
+            int min = (int)(GamePlayTime / 3600);
+            int sec = (int)(GamePlayTime / 3600);
+            
+           // GamePlayTimeText = " "+GamePlayTime;
+            GameEndUi.SetActive(true);
+            PlayerCh.SetActive(false);
+            GameStartCamera.SetActive(true);
+            PlayerCamera.SetActive(false);
+            GameStartState.SetActive(false);
+            PlayerState.SetActive(false);
+            GameOn = false;
+
+        }
+
+    }
     void Talk(int id, bool isNpc)
     {
         //데이터 세팅
@@ -346,6 +420,6 @@ public class GameManager : MonoBehaviour
         isTalk = true;
         talkIndex++;
     }
-}
+}   
 
 

@@ -254,8 +254,7 @@ public class Player : MonoBehaviour
             }
             if( other.name == "BossPortal")
             {
-                Debug.Log("11");
-                //캐릭터 전환 시전
+                manager.BossRoomSpawn();
             }
         }
     }
