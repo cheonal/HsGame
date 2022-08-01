@@ -198,6 +198,7 @@ public class Chicken : MonoBehaviour
                 mesh.material.color = Color.gray;
                 gameObject.layer = 10;
                 isDead = true;
+                Player.player.curexp += 15;
                 QuestManager.questManager.ChickenPoint++;
             }
 

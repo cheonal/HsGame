@@ -42,14 +42,14 @@ public class MagicArrow : MonoBehaviour
         switch (enumType)
         {
             case Type.skill2:
-                Damage = 50 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 400 + (400 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
 
             case Type.skill3:
-                Damage = 30 + (30 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 300 + (300 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
             case Type.skill5:
-                Damage = 200 + (200 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 1000 + (1000 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
         }
     }

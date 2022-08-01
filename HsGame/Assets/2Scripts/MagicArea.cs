@@ -39,11 +39,11 @@ public class MagicArea : MonoBehaviour
         switch (enumType)
         {
             case Type.skill1:
-                Damage = 30 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 50 + (50 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
 
             case Type.skill4:
-                Damage = 30 + (30 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
+                Damage = 100 + (100 * (PlayerStateUi.PlayerUI.DamageUp * (float)0.1));
                 break;
         }
     }

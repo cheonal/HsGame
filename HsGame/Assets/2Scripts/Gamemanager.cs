@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public TalkManager talkManager;
@@ -54,6 +54,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform KingRoom;
     [SerializeField] GameObject GameEndUi;
     [SerializeField] Text GamePlayTimeText;
+    [SerializeField] GameObject SwordImg;
+    [SerializeField] GameObject WandImg;
+    [SerializeField] GameObject SwordImg1;
+    [SerializeField] GameObject WandImg1;
+    [SerializeField] GameObject MagicImg;
+    [SerializeField] GameObject MagicImg1;
+    [SerializeField] GameObject Item4Img;
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
@@ -73,14 +80,13 @@ public class GameManager : MonoBehaviour
     float Guage;
     bool GameOn;
     bool BossOn;
-    float GamePlayTime;
+    [SerializeField] float GamePlayTime;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
     public void GameStart()
     {
-        GamePlayTime += Time.deltaTime;
         PlayerCh.SetActive(true);
         slime2.SetActive(true);
         GameStartCamera.SetActive(false);
@@ -88,7 +94,6 @@ public class GameManager : MonoBehaviour
         GameStartState.SetActive(false);
         PlayerState.SetActive(true);
         GameOn = true;
-
     }
     void Update()
     {
@@ -320,7 +325,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            ElixirMiniTime = 0;
             ElixirMiniGuage.anchoredPosition = Vector2.down * 300;
+            ElixirMiniGuage.localScale = new Vector2(1, 1);
             ElixirMini.SetActive(false);
         }
         if (PlayerStateUi.Item4CoodDown)
@@ -375,15 +382,42 @@ public class GameManager : MonoBehaviour
         NpcTalk.SetActive(isTalk);
         PlayerState.SetActive(!isTalk);
     }
+    public void ReStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void GameOut()
+    {
+        Application.Quit();
+    }
     void GameEnd()
     {
-        if(questManager.questId == 130)
+        if (GameOn)
+        {
+            GamePlayTime += Time.deltaTime;
+        }
+        if(questManager.questId == 20 && questManager.questActionIndex ==1)
+        {
+            SwordImg.SetActive(true);
+            SwordImg1.SetActive(true);
+        }
+        if (questManager.questId == 70)
+        {
+            WandImg.SetActive(true);
+            WandImg1.SetActive(true);
+            MagicImg.SetActive(true);
+            MagicImg1.SetActive(true);
+        }
+        if (questManager.questId == 110)
+        {
+            Item4Img.SetActive(true);
+        }
+        if (questManager.questId == 130)
         {
             int hour = (int)(GamePlayTime / 3600);
-            int min = (int)(GamePlayTime / 3600);
-            int sec = (int)(GamePlayTime / 3600);
-            
-           // GamePlayTimeText = " "+GamePlayTime;
+            int min = (int)((GamePlayTime - hour * 3600)/60);
+            int sec = (int)(GamePlayTime % 60);       
+            GamePlayTimeText.text = "클리어까지 걸린시간" + string.Format("{0:00}",hour) + ":" + string.Format("{0:00}", min) + ":" + string.Format("{0:00}", sec);
             GameEndUi.SetActive(true);
             PlayerCh.SetActive(false);
             GameStartCamera.SetActive(true);
@@ -391,7 +425,6 @@ public class GameManager : MonoBehaviour
             GameStartState.SetActive(false);
             PlayerState.SetActive(false);
             GameOn = false;
-
         }
 
     }
@@ -402,6 +435,12 @@ public class GameManager : MonoBehaviour
         string talkData = talkManager.GetTalk(id+ questTalkIndex, talkIndex);
 
         //대화가 끝날때
+        if (id == 3000)
+        {
+            PlayerStateUi.PlayerUI.Item1Count = 5;
+            PlayerStateUi.PlayerUI.Item2Count = 5;
+            PlayerStateUi.PlayerUI.Item3Count = 5;
+        }
         if (talkData == null)
         {
             isTalk = false;     

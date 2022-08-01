@@ -8,7 +8,6 @@ public class QuestManager : MonoBehaviour
     public int questActionIndex;
     public int ChickenPoint;
     public int EnemyPoint;
-    public GameManager gameManager;
     public static QuestManager questManager;
     public GameObject[] questObject;
     Dictionary<int, QuestData> questList;
@@ -79,6 +78,7 @@ public class QuestManager : MonoBehaviour
     {
         questId += 10;
         questActionIndex = 0;
+        Player.player.curexp += 10;
     }
     void MonesterData()
     {

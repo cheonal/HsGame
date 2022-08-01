@@ -9,7 +9,6 @@ public class TalkManager : MonoBehaviour
     void Awake()
     {
         talkData = new Dictionary<int, string[]>();
-
         GenerateData();
     }
     void GenerateData()
@@ -43,22 +42,19 @@ public class TalkManager : MonoBehaviour
         "마법에 대한 설명은 p키를 눌러서 확인하면 되오","정신력이 부족하면 마법을 사용할 수 없으니 참고하시게나"});
         talkData.Add(70 + 2000, new string[] { "이제 안내자 슬라임에게 돌아가 보시게나" });
         talkData.Add(70 + 1000, new string[] { "아 모험가님 마법을 배워서 돌아오셨군요 축하드려요!",
-        "이제 다음 목표를 수행하기 위해 저희 대왕슬라임님을 찾으러 같이 가도록 해요!"});
+        "이제 다음 목표를 수행하기 위해 저희 대왕 슬라임님을 찾으러 같이 가도록 해요!"});
+        talkData.Add(80 + 1000, new string[] { "대왕 슬라임님은 서쪽에 계세요"});
         talkData.Add(80 + 3000, new string[] { "자네는 누구인가?","아아 그런일들이 있었군","우리를 도와주신다니 참으로 감사하오",
         "모든일이 잘 해결되면 우리마을에 동상을 세워서 그대를 기억하도록 하겠소",
-            "왕국을 되찾기에 앞서서 우리의 무기 창고를 점령한 기계 몬스터들을 퇴치해주시오",
+            "왕국을 되찾기에 앞서서 우리의 무기 창고를 점령한 기계 몬스터들을 퇴치해주시오","소비아이템은 나에게 말을 걸면 언제든지 주겠네",
         "한 10마리 정도면 될 것 같소"});
-        talkData.Add(90 + 3000, new string[] { "적들을 퇴치해 주시게나" });
+        talkData.Add(90 + 3000, new string[] { "아이템을 채워드렸소" });
         talkData.Add(100 + 3000, new string[] { "덕분에 무기창고의 적들을 몰아내는데에 성공했소",
             "이제는 왕국을 탈환해야 하는데 커다란 악마 몬스터 때문에 우리 힘만으로는 역부족일세",
             "마을 중간으로 가면 악마 몬스터를 퇴치하러 갈 수 있소",
-        "퇴치하고 나면 4번키를 눌러서 돌아와 주시오",
-        "아이템 등은 나에게 말을 걸면 언제든지 주겠네"});
+        "퇴치하고 나면 4번키를 눌러서 돌아와 주시오",});
+        talkData.Add(110 + 3000, new string[] { "아이템을 채워드렸소" });
         talkData.Add(120 + 3000, new string[] { "덕분에 왕국을 되찾을 수 있게 되었네!","정말 고맙소 ㅎㅎ" });
-        //   talkData.Add(21 + 2000, new string[] { "나는 버섯이 아니야!" });
-        //   talkData.Add(21 + 5000, new string[] { "슬라임이 말한 버섯이 이것인가 보다" });
-        //   talkData.Add(22 + 1000, new string[] { "우와 고마워요", "ㅎㅎ",});
-
     }
     public string GetTalk(int id, int talkIndex)
     {

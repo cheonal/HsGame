@@ -394,8 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e79080c3b1bd6044ebe9494583fd86ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 300
-  curHealth: 300
+  maxHealth: 500
+  curHealth: 500
   Target: {fileID: 0}
   meleeArea: {fileID: 839315880174827199}
   isChase: 0

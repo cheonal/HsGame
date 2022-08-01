@@ -99,6 +99,7 @@ public class PlayerStateUi : MonoBehaviour
     }
     public void StateExit()
     {
+        player.isState = false;
         StateUi.anchoredPosition = Vector2.down * 2000;
     }
     public void ManualSkill1()
@@ -106,35 +107,35 @@ public class PlayerStateUi : MonoBehaviour
         ManualMainText.text = "스노우 크리스탈";
         ManualText.text = "주변 몬스터에게 피해를 준다!" + "\n"+ "눈보라 주변 적에게 지속 피해" + "\n" + "여기로 유인해";
         ManualManaText.text = "정신력 소모:20";
-        ManualDamageText.text = "30x(0.1공격력)";
+        ManualDamageText.text = "50x(0.1공격력)";
     }
     public void ManualSkill2()
     {
         ManualMainText.text = "파이어 볼";
         ManualText.text = "화염을 발사하는 마법!" + "\n" + "처음 적중한 적한테서 폭발하는 스킬";
         ManualManaText.text = "정신력 소모:5";
-        ManualDamageText.text = "50x(0.1공격력)";
+        ManualDamageText.text = "400x(0.1공격력)";
     }
     public void ManualSkill3()
     {
         ManualMainText.text = "에너지 볼트";
         ManualText.text = "에너지를 발사하는 마법!" + "\n" + "적을 관통해서 날아가는 스킬";
         ManualManaText.text = "정신력 소모:10";
-        ManualDamageText.text = "30x(0.1공격력)";
+        ManualDamageText.text = "300x(0.1공격력)";
     }
     public void ManualSkill4()
     {
         ManualMainText.text = "썬더 에리어";
         ManualText.text = "주변에 번개를 일으키는 마법!" + "\n" + "주변에 피해를 주고 날려버리는 스킬";
         ManualManaText.text = "정신력 소모:5";
-        ManualDamageText.text = "30x(0.1공격력)";
+        ManualDamageText.text = "100x(0.1공격력)";
     }
     public void ManualSkill5()
     {
         ManualMainText.text = "엘리멘탈 에로우";
         ManualText.text = "충전이 완료되면 강력한 화살 발사!" + "\n" + "2초이상 차징해서 발사하는 스킬 " + "\n" + "5초가 지나면 자동으로 발사";
         ManualManaText.text = "정신력 소모:20";
-        ManualDamageText.text = "200x(0.1공격력)"; ;
+        ManualDamageText.text = "1000x(0.1공격력)";
     }
     public void Item1()
     {
@@ -304,6 +305,7 @@ public class PlayerStateUi : MonoBehaviour
         weapon.Damage *= ((float)5/6);
         player.moveSpeed *= ((float)10/13);
     }
+    
     public void Item4Use()
     {
         if (!Item4CoodDown)

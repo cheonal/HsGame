@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     bool skillRcast;
     bool skillRUp;
     bool StateDown;
-    bool isState;
+    public bool isState;
     bool TalkDown;
     bool iswallF;
     bool iswallR;
@@ -203,6 +203,7 @@ public class Player : MonoBehaviour
             State.Item4Use();
         }
     }
+
     void StateOn()
     {
         if (StateDown)
@@ -362,7 +363,7 @@ public class Player : MonoBehaviour
     {
         firedelay += Time.deltaTime;
         canAttack = 0.7 < firedelay;
-        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap && !manager.isTalk && !isDead)
+        if (fDown && canAttack && !isJump && hasweaponindex == 1 && !isSwap && !manager.isTalk && !isDead && !isState)
         {
             audiosoruce.clip = clip[1];
             audiosoruce.Play();
@@ -373,7 +374,7 @@ public class Player : MonoBehaviour
             firedelay = 0;
         }
         else if ((skill1Down || skill2Down || skill3Down || skill4Down)
-            && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !manager.isTalk && !isDead)
+            && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !manager.isTalk && !isDead && !isState)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);    
             if (skill1Down && !skill1coolDown && curmana > 0)
@@ -413,7 +414,7 @@ public class Player : MonoBehaviour
                 firedelay = -0.2f;
             }
         }
-        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0 && !manager.isTalk && !isDead)
+        else if (skillRDown && canAttack && !isJump && hasweaponindex == 2 && !isSwap && !skillRcoolDown && curmana > 0 && !manager.isTalk && !isDead &&!isState)
         {
             characterBody.forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z);
             Wand.MagicRstart();
@@ -513,7 +514,7 @@ public class Player : MonoBehaviour
     void Talk()
     {
 
-        if (TalkDown && scanObject != null)
+        if (TalkDown && scanObject != null && hasweaponindex==0)
         {
             manager.Action(scanObject);
         }
@@ -539,7 +540,6 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         FrezzeRotaiton();
-
         Scan();
     }
 

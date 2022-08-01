@@ -207,7 +207,7 @@ public class Enemy : MonoBehaviour
             QuestManager.questManager.EnemyPoint++;
             EnemySpawn.enemySpawn.EnemyCount--;
             Destroy(gameObject, 4);
-            Player.player.curexp += 15;
+            Player.player.curexp += 25;
         }
     }
 }
