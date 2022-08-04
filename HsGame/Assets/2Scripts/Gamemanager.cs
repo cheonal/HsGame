@@ -61,6 +61,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject MagicImg;
     [SerializeField] GameObject MagicImg1;
     [SerializeField] GameObject Item4Img;
+    [SerializeField] GameObject item4img1;
+    [SerializeField] GameObject Slime1StartQuest;
+    [SerializeField] GameObject Slime1EndQuest;
+    [SerializeField] GameObject Slime2StartQuest;
+    [SerializeField] GameObject Slime2EndQuest;
+    [SerializeField] GameObject Slime3StartQuest;
+    [SerializeField] GameObject Slime3EndQuest;
     public Text Lv;
     public Text TalkText;
     public int talkIndex;
@@ -401,16 +408,58 @@ public class GameManager : MonoBehaviour
             SwordImg.SetActive(true);
             SwordImg1.SetActive(true);
         }
+        if(questManager.questId == 30)
+        {
+            Slime1StartQuest.SetActive(false);
+        }
+        if (questManager.questId == 40)
+        {
+            Slime1EndQuest.SetActive(true);
+        }
+        if (questManager.questId == 50)
+        {
+            Slime1EndQuest.SetActive(false);
+            Slime2StartQuest.SetActive(true);
+        }
+        if (questManager.questId == 60 && questManager.questActionIndex == 1)
+        {
+            Slime2StartQuest.SetActive(false);
+        }
+        if (questManager.questId == 60 && questManager.questActionIndex == 2)
+        {
+            Slime2EndQuest.SetActive(true);
+        }
         if (questManager.questId == 70)
         {
+            Slime2EndQuest.SetActive(false);
+            Slime1StartQuest.SetActive(true);
             WandImg.SetActive(true);
             WandImg1.SetActive(true);
             MagicImg.SetActive(true);
             MagicImg1.SetActive(true);
         }
+        if (questManager.questId == 80)
+        {
+            Slime1StartQuest.SetActive(false);
+            Slime3StartQuest.SetActive(true);
+        }
+        if(questManager.questId == 90)
+        {
+            Slime3StartQuest.SetActive(false);
+        }
+        if(questManager.questId == 100)
+        {
+            Slime3EndQuest.SetActive(true);
+        }
         if (questManager.questId == 110)
         {
+            Slime3EndQuest.SetActive(false);
             Item4Img.SetActive(true);
+            item4img1.SetActive(true);
+        }
+        if(questManager.questId == 120)
+        {
+            Slime3EndQuest.SetActive(true);
         }
         if (questManager.questId == 130)
         {
