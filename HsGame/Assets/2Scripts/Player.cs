@@ -8,25 +8,7 @@ public class Player : MonoBehaviour
     public EnemySpawn enemySpawn;
     public ChickenSpawn ChickenSpawn;
     public PlayerStateUi State;
-    public float maxhealth;
-    public float curhealth;
-    public float maxmana;
-    public float curmana;
-    public float maxexp = 100;
-    public float curexp = 0;
-    public int LvPoint;
-    public int PlayerLv =1; 
-    public GameObject[] Weapons;
     public static Player player;
-    public float rotateSensitivity;
-    public float moveSpeed;
-    public bool skill1coolDown;
-    public bool skill2coolDown;
-    public bool skill3coolDown;
-    public bool skill4coolDown;
-    public bool skillRcoolDown;
-    public bool isCasting;
-    public bool isPortal;
     public Weapon Sword;
     public Weapon Wand;
     public Transform cameraArm;
@@ -34,9 +16,41 @@ public class Player : MonoBehaviour
     public Camera followCamera;
     public GameObject item3On;
     public GameObject HitEffect;
-    private AudioSource audiosoruce;
-    [SerializeField] private AudioClip[] clip;
+
+    public bool skill1coolDown;
+    public bool skill2coolDown;
+    public bool skill3coolDown;
+    public bool skill4coolDown;
+    public bool skillRcoolDown;
+    public bool isCasting;
+    public bool isPortal;
+    public bool isState;
     public bool isDead;
+    public float maxhealth;
+    public float curhealth;
+    public float maxmana;
+    public float curmana;
+    public float maxexp = 100;
+    public float curexp = 0;
+    public float firedelay;
+    public float moveSpeed;
+    public int LvPoint;
+    public int PlayerLv = 1;
+
+    [SerializeField] GameObject[] Weapons;
+    [SerializeField] float rotateSensitivity;
+    [SerializeField] AudioClip[] clip;
+    private AudioSource audiosoruce;
+
+    RaycastHit rayhit;
+    GameObject scanObject;
+    Rigidbody rigid;
+    Animator anim;
+    MeshRenderer[] meshs;
+    Vector3 lookforward;
+    Vector3 lookright;
+    Vector3 movedir;
+
     bool canAttack = true;
     bool canDodge = true;
     bool isJump;
@@ -49,7 +63,6 @@ public class Player : MonoBehaviour
     bool skillRcast;
     bool skillRUp;
     bool StateDown;
-    public bool isState;
     bool TalkDown;
     bool iswallF;
     bool iswallR;
@@ -66,17 +79,9 @@ public class Player : MonoBehaviour
     bool Item3;
     bool Item4;
     int hasweaponindex = 0;
-    public float firedelay;
     float dodgedelay;
     float skillRcasting;
-    RaycastHit rayhit;
-    GameObject scanObject;
-    Rigidbody rigid;
-    Animator anim;
-    MeshRenderer[] meshs;
-    Vector3 lookforward;
-    Vector3 lookright;
-    Vector3 movedir;
+
     public void Start()
     {
         player = this.GetComponent<Player>();

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public QuestManager questManager;
     public PlayerStateUi PlayerStateUi;
     public Player player;
+
     public RectTransform skillR;
     public RectTransform skillRGuageFront;
     public RectTransform skillRGuagesucces;
@@ -25,35 +26,33 @@ public class GameManager : MonoBehaviour
     public RectTransform PlayerMp;
     public RectTransform PlayerExp;
     public RectTransform BossHp;
+    public RectTransform ElixirMiniGuage;
     public GameObject BossGroup;
     public GameObject ElixirMini;
-    public RectTransform ElixirMiniGuage;
     public GameObject PlayerWand;
     public GameObject PlayerSword;
     public GameObject PlayerHand;
-    public Image IconWand;
-    public Image IconSword;
-    public Image IconHand;
     public GameObject PlayerState;
     public GameObject scanObject;
     public GameObject NpcTalk;
-    [SerializeField] RectTransform BossHpGruop;
+    public Image IconWand;
+    public Image IconSword;
+    public Image IconHand;
+    public Text Lv;
+    public Text TalkText;
+    public Text QuestText;
+    public int talkIndex;
+    public bool isTalk;
+
     [SerializeField] GameObject GameStartState;
     [SerializeField] GameObject GameOverState;
-    [SerializeField] Image GameStartButton;
-    [SerializeField] Text GameOverText;
     [SerializeField] GameObject GameStartCamera;
     [SerializeField] GameObject PlayerCamera;
     [SerializeField] GameObject PlayerCh;
     [SerializeField] GameObject slime1;
     [SerializeField] GameObject slime2;
     [SerializeField] GameObject slime3;
-    [SerializeField] Text EnemyCountText;
-    [SerializeField] Text BossCountText;
-    [SerializeField] Transform BossRoom;
-    [SerializeField] Transform KingRoom;
     [SerializeField] GameObject GameEndUi;
-    [SerializeField] Text GamePlayTimeText;
     [SerializeField] GameObject SwordImg;
     [SerializeField] GameObject WandImg;
     [SerializeField] GameObject SwordImg1;
@@ -68,11 +67,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Slime2EndQuest;
     [SerializeField] GameObject Slime3StartQuest;
     [SerializeField] GameObject Slime3EndQuest;
-    public Text Lv;
-    public Text TalkText;
-    public int talkIndex;
-    public Text QuestText;
-    public bool isTalk;
+    [SerializeField] RectTransform BossHpGruop;
+    [SerializeField] Transform BossRoom;
+    [SerializeField] Transform KingRoom;
+    [SerializeField] Text GamePlayTimeText;
+    [SerializeField] Text EnemyCountText;
+    [SerializeField] Text BossCountText;
+    [SerializeField] Text GameOverText;
+    [SerializeField] Image GameStartButton;
+    [SerializeField] float GamePlayTime;
+
     AudioSource audioSource;
     float ElixirMiniTime;
     float Item1;
@@ -87,7 +91,7 @@ public class GameManager : MonoBehaviour
     float Guage;
     bool GameOn;
     bool BossOn;
-    [SerializeField] float GamePlayTime;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
