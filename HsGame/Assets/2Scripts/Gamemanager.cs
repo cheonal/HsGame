@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Slime2EndQuest;
     [SerializeField] GameObject Slime3StartQuest;
     [SerializeField] GameObject Slime3EndQuest;
+    [SerializeField] GameObject MonsterField1;
+    [SerializeField] GameObject MonsterField2;
     [SerializeField] RectTransform BossHpGruop;
     [SerializeField] Transform BossRoom;
     [SerializeField] Transform KingRoom;
@@ -414,6 +416,7 @@ public class GameManager : MonoBehaviour
         }
         if(questManager.questId == 30)
         {
+            MonsterField1.SetActive(true);
             Slime1StartQuest.SetActive(false);
         }
         if (questManager.questId == 40)
@@ -450,6 +453,7 @@ public class GameManager : MonoBehaviour
         if(questManager.questId == 90)
         {
             Slime3StartQuest.SetActive(false);
+            MonsterField2.SetActive(true);
         }
         if(questManager.questId == 100)
         {
